@@ -156,7 +156,11 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Accumulator.h" />
+    <ClInclude Include="CLI.h" />
     <ClInclude Include="OrderBook.h" />
+    <ClInclude Include="OrderItem.h" />
+    <ClInclude Include="Types.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

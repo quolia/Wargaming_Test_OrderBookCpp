@@ -9,6 +9,18 @@
     <ClInclude Include="OrderBook.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="OrderItem.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="Types.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="Accumulator.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="CLI.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
