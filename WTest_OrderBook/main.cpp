@@ -4,51 +4,29 @@
 #include <iostream>
 #include "OrderBook.h"
 #include "Accumulator.h"
+#include "App.h"
 
 using namespace std;
 using namespace WG_ORDERBOOK;
 
-int main()
+int main(int argc, char* argv[])
 {
+	cout << "Started" << endl;
+
 	try
 	{
-		cout << "Started" << endl;
+		application app;
+		app.init(argc, argv);
+		app.run();
 
-		order_book book;
-		accumulator accum;
-		accum.init(&book);
+		cout << app.average_highest_price() << endl;
 
-		order_item o100(100, 1000, 10);
-		order_item o101(101, 2000, 13);
-		order_item o102(102, 2200, 13);
-
-		cout << book.max_price_order().price() << endl;
-
-		accum.add_order(o100);
-
-		cout << book.max_price_order().price() << endl;
-
-		accum.add_order(o101);
-
-		cout << book.max_price_order().price() << endl;
-
-		accum.add_order(o102);
-
-		cout << book.max_price_order().price() << endl;
-
-		cout << "---" << endl;
-
-		accum.remove_order(101, 2400);
-		cout << book.max_price_order().price() << endl;
-		accum.remove_order(102, 2500);
-		cout << book.max_price_order().price() << endl;
-		accum.remove_order(100, 4000);
-		cout << book.max_price_order().price() << endl;
-
-		cout << accum.average_highest_price() << endl;
+		cout << "Done" << endl;
+		return 0;
 	}
 	catch (const exception& e)
 	{
 		cout << "Error: " << e.what() << endl;
+		exit(-1);
 	}
 }

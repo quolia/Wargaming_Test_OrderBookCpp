@@ -8,6 +8,23 @@ namespace WG_ORDERBOOK
 {
 	using namespace std;
 
+	// Order record in source file.
+	struct order_record
+	{
+		timestamp_type timestamp;
+		unsigned id;
+		bool is_insert;
+		double price;
+
+		order_record()
+		{
+			timestamp = 0;
+			id = 0;
+			is_insert = false;
+			price = 0;
+		}
+	};
+
 	// Order item class.
 	class order_item
 	{
@@ -29,6 +46,13 @@ namespace WG_ORDERBOOK
 			_id = id;
 			_timestamp = timestamp;
 			_price = price;
+		}
+
+		order_item(const order_record& record)
+		{
+			_id = record.id;
+			_timestamp = record.timestamp;
+			_price = record.price;
 		}
 
 		unsigned id() const

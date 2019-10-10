@@ -11,7 +11,7 @@ namespace WG_ORDERBOOK
 
 	class accumulator
 	{
-		order_book_iface* _order_book;
+		shared_ptr<order_book_iface> _order_book;
 
 		double _accumulator;
 		timestamp_type _last_timestamp;
@@ -24,7 +24,7 @@ namespace WG_ORDERBOOK
 			reset();
 		}
 
-		void init(order_book_iface* order_book)
+		void init(shared_ptr<order_book_iface>& order_book)
 		{
 			_order_book = order_book;
 		}
