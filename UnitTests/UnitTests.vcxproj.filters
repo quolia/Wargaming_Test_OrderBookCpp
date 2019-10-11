@@ -30,6 +30,9 @@
     <ClCompile Include="File.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OrderBook.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -38,6 +41,12 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="TestOrders\empty.txt">
+      <Filter>TestOrders</Filter>
+    </Text>
+    <Text Include="TestOrders\invalid.txt">
+      <Filter>TestOrders</Filter>
+    </Text>
+    <Text Include="TestOrders\valid10.5.txt">
       <Filter>TestOrders</Filter>
     </Text>
   </ItemGroup>

@@ -55,5 +55,45 @@ namespace UnitTests
 				//
 			}
 		}
+
+		TEST_METHOD(Test_File_file_open_and_close)
+		{
+			orders_file file;
+			file.open_for_read("valid.txt");
+			file.close();
+			Assert::IsFalse(file.is_opened(), L"File is still opened.");
+		}
+
+		TEST_METHOD(Test_File_file_read_from_invalid)
+		{
+			try
+			{
+				orders_file file;
+				file.open_for_read("invalid.txt");
+
+				order_record order;
+				file.read_order_record(order);
+				Assert::Fail(L"Exception missing.");
+			}
+			catch (const exception & e)
+			{
+				//
+			}
+		}
+
+		TEST_METHOD(Test_File_file_read_from_empty)
+		{
+			try
+			{
+				orders_file file;
+				file.open_for_read("empty.txt");
+				order_record order;
+				Assert::IsFalse(file.read_order_record(order), L"Read from empty.");
+			}
+			catch (const exception & e)
+			{
+				//
+			}
+		}
 	};
 }
