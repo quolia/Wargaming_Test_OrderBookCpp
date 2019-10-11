@@ -12,11 +12,19 @@ namespace WG_ORDERBOOK
 {
 	using namespace std;
 
+	// Application class.
 	class application
 	{
+		// The flag is true if the application instance has been inited successfully.
 		volatile bool _is_inited;
+
+		// File to read.
 		orders_file _src_file;
+
+		// Pointer to order book interface.
 		shared_ptr<order_book_iface> _order_book;
+
+		// Orders time-weight accumulator.
 		accumulator _accumulator;
 	
 	public:
@@ -26,6 +34,7 @@ namespace WG_ORDERBOOK
 			_is_inited = false;
 		}
 
+		// Initiate application instance.
 		void init(int argc, char* argv[])
 		{
 			_is_inited = false;
@@ -42,6 +51,7 @@ namespace WG_ORDERBOOK
 			_is_inited = true;
 		}
 
+		// Reads source file till the end.
 		void run()
 		{
 			if (!_is_inited)
@@ -65,6 +75,7 @@ namespace WG_ORDERBOOK
 			}
 		}
 
+		// Returns time-weighted average highest price of orders.
 		double average_highest_price() const
 		{
 			if (!_is_inited)

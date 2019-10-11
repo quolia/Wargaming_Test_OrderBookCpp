@@ -92,10 +92,17 @@ namespace UnitTests
 		{
 			char* argv[2] = { "path", "../UnitTests/TestOrders/valid10.5.txt" };
 
-			application app;
-			app.init(2, argv);
-			app.run();
-			Assert::IsTrue(app.average_highest_price() == 10.5, L"Incorrect result.");
+			try
+			{
+				application app;
+				app.init(2, argv);
+				app.run();
+				Assert::IsTrue(app.average_highest_price() == 10.5, L"Incorrect result.");
+			}
+			catch (const exception & e)
+			{
+				Assert::Fail(e.what());
+			}
 		}
 	};
 }

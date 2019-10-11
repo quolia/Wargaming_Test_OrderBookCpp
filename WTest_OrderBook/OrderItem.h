@@ -16,12 +16,37 @@ namespace WG_ORDERBOOK
 		bool is_insert;
 		double price;
 
+		// Default ctor.
 		order_record()
 		{
-			timestamp = 0;
+			timestamp = invalid_timestamp;
 			id = 0;
 			is_insert = false;
 			price = 0;
+		}
+
+		// Validates order record data.
+		void validate()
+		{
+			if (id < 1)
+			{
+				throw exception("Invalid order id.");
+			}
+
+			if (timestamp == invalid_timestamp)
+			{
+				throw exception("Invalid order timestamp.");
+			}
+
+			if (is_insert && price < 0)
+			{
+				throw exception("Invalid order price.");
+			}
+			
+			if (!is_insert && price != 0)
+			{
+				throw exception("Invalid order data.");
+			}
 		}
 	};
 
@@ -34,13 +59,15 @@ namespace WG_ORDERBOOK
 
 	public:
 
+		// Default ctor.
 		order_item()
 		{
 			_id = 0;
-			_timestamp = 0;
+			_timestamp = invalid_timestamp;
 			_price = 0;
 		}
 
+		// Data ctor.
 		order_item(unsigned id, timestamp_type timestamp, double price)
 		{
 			_id = id;
@@ -48,6 +75,7 @@ namespace WG_ORDERBOOK
 			_price = price;
 		}
 
+		// Copy ctor to copy from order record.
 		order_item(const order_record& record)
 		{
 			_id = record.id;
@@ -55,28 +83,32 @@ namespace WG_ORDERBOOK
 			_price = record.price;
 		}
 
+		// Returns order id.
 		unsigned id() const
 		{
 			return _id;
 		}
 
+		// Returns order price.
 		double price() const
 		{
 			return _price;
 		}
 
+		// Returns order timestamp.
 		timestamp_type timestamp() const
 		{
 			return _timestamp;
 		}
 	};
 
-	// Comparer to use in set to order items by price and timestamp.
+	// Comparer to use in set to sort items by price and timestamp.
 	class order_comparer
 	{
 	public:
 		bool operator()(const order_item& l, const order_item& r) const
 		{
+			// If the prices are equal than compare timestamp.
 			return l.price() == r.price() ? l.timestamp() < r.timestamp() : l.price() < r.price();
 		}
 	};

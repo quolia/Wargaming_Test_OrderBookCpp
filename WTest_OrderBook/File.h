@@ -14,6 +14,7 @@ namespace WG_ORDERBOOK
 	// Simple wrapper for a file.
 	class orders_file
 	{
+		// Stream to read.
 		ifstream _stream;
 
 	public:
@@ -23,6 +24,7 @@ namespace WG_ORDERBOOK
 			close();
 		}
 
+		// Close file if opened.
 		void close()
 		{
 			if (is_opened())
@@ -31,6 +33,7 @@ namespace WG_ORDERBOOK
 			}
 		}
 
+		// Opens file for read.
 		void open_for_read(const char* file_name)
 		{
 			close();
@@ -42,7 +45,8 @@ namespace WG_ORDERBOOK
 			}
 		}
 
-		bool read_order_record(order_record& order)
+		// Reads and validate orders records.
+		bool read_order_record(order_record& record)
 		{
 			if (!is_opened())
 			{
@@ -55,7 +59,7 @@ namespace WG_ORDERBOOK
 			}
 			else
 			{
-				if (!(_stream >> order.timestamp))
+				if (!(_stream >> record.timestamp))
 				{
 					throw exception("Invalid file format.");
 				}
@@ -67,25 +71,28 @@ namespace WG_ORDERBOOK
 					throw exception("Invalid file format.");
 				}
 
-				order.is_insert = type == 'I';
+				record.is_insert = type == 'I';
 
-				if (!(_stream >> order.id))
+				if (!(_stream >> record.id))
 				{
 					throw exception("Invalid file format.");
 				}
 
-				if (order.is_insert)
+				if (record.is_insert)
 				{
-					if (!(_stream >> order.price))
+					if (!(_stream >> record.price))
 					{
 						throw exception("Invalid file format.");
 					}
 				}
 
+				record.validate();
+
 				return true;
 			}
 		}
 
+		// Checks if file is opened.
 		bool const is_opened()
 		{
 			return _stream.is_open();

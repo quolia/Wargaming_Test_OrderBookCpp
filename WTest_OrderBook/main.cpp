@@ -2,8 +2,6 @@
 //
 
 #include <iostream>
-#include "OrderBook.h"
-#include "Accumulator.h"
 #include "App.h"
 
 using namespace std;
@@ -15,16 +13,18 @@ int main(int argc, char* argv[])
 
 	try
 	{
+		// Create application instance, initiate it and run.
 		application app;
 		app.init(argc, argv);
 		app.run();
 
-		cout << app.average_highest_price() << endl;
+		// Output result.
+		cout << "Time-weighted average highest price of orders: " << app.average_highest_price() << endl;
 
 		cout << "Done" << endl;
 		return 0;
 	}
-	catch (const exception& e)
+	catch (const exception& e) // Catch all exceptions and exit.
 	{
 		cout << "Error: " << e.what() << endl;
 		exit(-1);

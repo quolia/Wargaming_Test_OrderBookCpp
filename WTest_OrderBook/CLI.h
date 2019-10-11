@@ -15,11 +15,13 @@ namespace WG_ORDERBOOK
 
 	public:
 
+		// Source file name.
 		const char* src_file_name() const
 		{
 			return _src_file_name.c_str();
 		}
 
+		// Initiate and validate command line parameters.
 		void init(int argc, char* argv[])
 		{
 			if (argc < 2)

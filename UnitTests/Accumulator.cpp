@@ -153,5 +153,26 @@ namespace UnitTests
 
 			Assert::IsTrue(acc.average_highest_price() == 60000 / (double)3000);
 		}
+
+		TEST_METHOD(Test_Accumulator_result_gap)
+		{
+			accumulator acc;
+			shared_ptr<order_book_iface> ptr(new order_book());
+			acc.init(ptr);
+
+			order_item o1(1, 1000, 20);
+			acc.add_order(o1);
+			acc.remove_order(o1.id(), 2000);
+
+			// 1000 msec gap.
+			// "There may be periods when there are no orders (in this case, such periods should not be considered)."
+
+			order_item o2(2, 3000, 10);
+			acc.add_order(o2);
+			acc.remove_order(o2.id(), 4000);
+			
+
+			Assert::IsTrue(acc.average_highest_price() == 30000 / (double)2000);
+		}
 	};
 }
