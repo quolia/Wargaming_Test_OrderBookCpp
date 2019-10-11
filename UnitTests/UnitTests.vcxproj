@@ -161,9 +161,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Accumulator.cpp" />
+    <ClCompile Include="App.cpp" />
     <ClCompile Include="CLI.cpp" />
     <ClCompile Include="File.cpp" />
     <ClCompile Include="OrderBook.cpp" />
+    <ClCompile Include="OrderItem.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

@@ -90,15 +90,15 @@ namespace UnitTests
 
 			order_book book;
 			book.add(order1);
-			Assert::IsTrue(book.max_price_order().id() == 1, L"Max price order is not correct.");
+			Assert::IsTrue(book.max_price_order().id() == 1, L"Max price order is not correct 1.");
 			book.add(order2);
-			Assert::IsTrue(book.max_price_order().id() == 2, L"Max price order is not correct.");
+			Assert::IsTrue(book.max_price_order().id() == 2, L"Max price order is not correct 2.");
 			book.add(order3);
-			Assert::IsTrue(book.max_price_order().id() == 3, L"Max price order is not correct.");
+			Assert::IsTrue(book.max_price_order().id() == 3, L"Max price order is not correct 3.");
 			book.add(order4);
-			Assert::IsTrue(book.max_price_order().id() == 3, L"Max price order is not correct.");
+			Assert::IsTrue(book.max_price_order().id() == 3, L"Max price order is not correct 4.");
 			book.add(order5);
-			Assert::IsTrue(book.max_price_order().id() == 5, L"Max price order is not correct.");
+			Assert::IsTrue(book.max_price_order().id() == 5, L"Max price order is not correct 5.");
 		}
 	};
 }

@@ -59,7 +59,7 @@ namespace UnitTests
 		TEST_METHOD(Test_File_file_open_and_close)
 		{
 			orders_file file;
-			file.open_for_read("valid.txt");
+			file.open_for_read("../UnitTests/TestOrders/valid10.5.txt");
 			file.close();
 			Assert::IsFalse(file.is_opened(), L"File is still opened.");
 		}
@@ -69,7 +69,7 @@ namespace UnitTests
 			try
 			{
 				orders_file file;
-				file.open_for_read("invalid.txt");
+				file.open_for_read("../UnitTests/TestOrders/invalid.txt");
 
 				order_record order;
 				file.read_order_record(order);
@@ -86,7 +86,7 @@ namespace UnitTests
 			try
 			{
 				orders_file file;
-				file.open_for_read("empty.txt");
+				file.open_for_read("../UnitTests/TestOrders/empty.txt");
 				order_record order;
 				Assert::IsFalse(file.read_order_record(order), L"Read from empty.");
 			}

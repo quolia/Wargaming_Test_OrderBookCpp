@@ -11,9 +11,13 @@ namespace WG_ORDERBOOK
 
 	class accumulator
 	{
+		// Pointer to underlying order book container.
 		shared_ptr<order_book_iface> _order_book;
 
+		// Accumulated value of prices.
 		double _accumulator;
+
+
 		timestamp_type _last_timestamp;
 		timestamp_type _first_timestamp;
 

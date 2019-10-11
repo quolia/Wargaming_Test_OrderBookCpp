@@ -1,10 +1,12 @@
 #pragma once
-#include "CLI.h"
-#include <iostream>
-#include "File.h"
 #ifndef  _WTEST_APP_H
 #define _WTEST_APP_H
 
+#include <iostream>
+#include "CLI.h"
+#include "File.h"
+#include "OrderBook.h"
+#include "Accumulator.h"
 
 namespace WG_ORDERBOOK
 {
@@ -12,7 +14,7 @@ namespace WG_ORDERBOOK
 
 	class application
 	{
-		bool _is_inited;
+		volatile bool _is_inited;
 		orders_file _src_file;
 		shared_ptr<order_book_iface> _order_book;
 		accumulator _accumulator;
@@ -65,6 +67,11 @@ namespace WG_ORDERBOOK
 
 		double average_highest_price() const
 		{
+			if (!_is_inited)
+			{
+				throw exception("Application has not been inited yet.");
+			}
+
 			return _accumulator.average_highest_price();
 		}
 	};
