@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "CppUnitTest.h"
+#include "Utils.h"
 #include "../WTest_OrderBook/App.h"
 using namespace WG_ORDERBOOK;
 
@@ -101,7 +102,8 @@ namespace UnitTests
 			}
 			catch (const exception & e)
 			{
-				Assert::Fail(e.what());
+				string str = e.what();
+				Assert::Fail(utils::widen(str).c_str());
 			}
 		}
 	};

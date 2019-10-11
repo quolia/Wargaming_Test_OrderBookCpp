@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 #include "../WTest_OrderBook/File.h"
+#include "Utils.h"
 using namespace WG_ORDERBOOK;
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
@@ -59,8 +60,17 @@ namespace UnitTests
 		TEST_METHOD(Test_File_file_open_and_close)
 		{
 			orders_file file;
-			file.open_for_read("../UnitTests/TestOrders/valid10.5.txt");
-			file.close();
+			try
+			{
+				file.open_for_read("../UnitTests/TestOrders/valid10.5.txt");
+				file.close();
+			}
+			catch (const exception & e)
+			{
+				string str = e.what();
+				Assert::Fail(utils::widen(str).c_str());
+			}
+
 			Assert::IsFalse(file.is_opened(), L"File is still opened.");
 		}
 

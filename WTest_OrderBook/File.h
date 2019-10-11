@@ -85,6 +85,10 @@ namespace WG_ORDERBOOK
 						throw exception("Invalid file format.");
 					}
 				}
+				else
+				{
+					record.price = 0;
+				}
 
 				record.validate();
 

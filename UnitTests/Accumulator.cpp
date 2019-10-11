@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 #include "../WTest_OrderBook/Accumulator.h"
+#include "Utils.h"
 using namespace WG_ORDERBOOK;
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
@@ -45,13 +46,21 @@ namespace UnitTests
 
 		TEST_METHOD(Test_Accumulator_init)
 		{
-			accumulator acc;			
+			try
 			{
-				shared_ptr<order_book_iface> ptr(new order_book());
-				acc.init(ptr);
+				accumulator acc;
+				{
+					shared_ptr<order_book_iface> ptr(new order_book());
+					acc.init(ptr);
+				}
+				order_item order;
+				acc.add_order(order);
 			}
-			order_item order;
-			acc.add_order(order);
+			catch (const exception & e)
+			{
+				string str = e.what();
+				Assert::Fail(utils::widen(str).c_str());
+			}
 		}
 
 		TEST_METHOD(Test_Accumulator_remove_from_empty)
@@ -108,12 +117,20 @@ namespace UnitTests
 		TEST_METHOD(Test_Accumulator_result1)
 		{
 			accumulator acc;
-			shared_ptr<order_book_iface> ptr(new order_book());
-			acc.init(ptr);
+			try
+			{
+				shared_ptr<order_book_iface> ptr(new order_book());
+				acc.init(ptr);
 
-			order_item o1(1, 1000, 10);
-			acc.add_order(o1);
-			acc.remove_order(o1.id(), 2000);
+				order_item o1(1, 1000, 10);
+				acc.add_order(o1);
+				acc.remove_order(o1.id(), 2000);
+			}
+			catch (const exception & e)
+			{
+				string str = e.what();
+				Assert::Fail(utils::widen(str).c_str());
+			}
 
 			Assert::IsTrue(acc.average_highest_price() == 10);
 		}
@@ -121,17 +138,25 @@ namespace UnitTests
 		TEST_METHOD(Test_Accumulator_result2)
 		{
 			accumulator acc;
-			shared_ptr<order_book_iface> ptr(new order_book());
-			acc.init(ptr);
+			try
+			{
+				shared_ptr<order_book_iface> ptr(new order_book());
+				acc.init(ptr);
 
-			order_item o1(1, 1000, 10);
-			order_item o2(2, 2000, 20);
+				order_item o1(1, 1000, 10);
+				order_item o2(2, 2000, 20);
 
-			acc.add_order(o1);
-			acc.add_order(o2);
+				acc.add_order(o1);
+				acc.add_order(o2);
 
-			acc.remove_order(o2.id(), 3000);
-			acc.remove_order(o1.id(), 4000);
+				acc.remove_order(o2.id(), 3000);
+				acc.remove_order(o1.id(), 4000);
+			}
+			catch (const exception & e)
+			{
+				string str = e.what();
+				Assert::Fail(utils::widen(str).c_str());
+			}
 
 			Assert::IsTrue(acc.average_highest_price() == 40000 / (double)3000);
 		}
@@ -139,17 +164,25 @@ namespace UnitTests
 		TEST_METHOD(Test_Accumulator_result3)
 		{
 			accumulator acc;
-			shared_ptr<order_book_iface> ptr(new order_book());
-			acc.init(ptr);
+			try
+			{
+				shared_ptr<order_book_iface> ptr(new order_book());
+				acc.init(ptr);
 
-			order_item o1(1, 1000, 20);
-			order_item o2(2, 2000, 10);
+				order_item o1(1, 1000, 20);
+				order_item o2(2, 2000, 10);
 
-			acc.add_order(o1);
-			acc.add_order(o2);
+				acc.add_order(o1);
+				acc.add_order(o2);
 
-			acc.remove_order(o2.id(), 3000);
-			acc.remove_order(o1.id(), 4000);
+				acc.remove_order(o2.id(), 3000);
+				acc.remove_order(o1.id(), 4000);
+			}
+			catch (const exception & e)
+			{
+				string str = e.what();
+				Assert::Fail(utils::widen(str).c_str());
+			}
 
 			Assert::IsTrue(acc.average_highest_price() == 60000 / (double)3000);
 		}
@@ -157,20 +190,27 @@ namespace UnitTests
 		TEST_METHOD(Test_Accumulator_result_gap)
 		{
 			accumulator acc;
-			shared_ptr<order_book_iface> ptr(new order_book());
-			acc.init(ptr);
+			try
+			{
+				shared_ptr<order_book_iface> ptr(new order_book());
+				acc.init(ptr);
 
-			order_item o1(1, 1000, 20);
-			acc.add_order(o1);
-			acc.remove_order(o1.id(), 2000);
+				order_item o1(1, 1000, 20);
+				acc.add_order(o1);
+				acc.remove_order(o1.id(), 2000);
 
-			// 1000 msec gap.
-			// "There may be periods when there are no orders (in this case, such periods should not be considered)."
+				// 1000 msec gap.
+				// "There may be periods when there are no orders (in this case, such periods should not be considered)."
 
-			order_item o2(2, 3000, 10);
-			acc.add_order(o2);
-			acc.remove_order(o2.id(), 4000);
-			
+				order_item o2(2, 3000, 10);
+				acc.add_order(o2);
+				acc.remove_order(o2.id(), 4000);
+			}
+			catch (const exception & e)
+			{
+				string str = e.what();
+				Assert::Fail(utils::widen(str).c_str());
+			}
 
 			Assert::IsTrue(acc.average_highest_price() == 30000 / (double)2000);
 		}
