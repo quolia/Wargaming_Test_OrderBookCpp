@@ -62,14 +62,14 @@ namespace WG_ORDERBOOK
 
 			while (_src_file.read_order_record(order_record))
 			{
-				if (order_record.is_insert)
+				if (order_record._is_insert)
 				{
 					order_item order = order_record;
 					_accumulator.add_order(order);
 				}
 				else
 				{
-					_accumulator.remove_order(order_record.id, order_record.timestamp);
+					_accumulator.remove_order(order_record._id, order_record._timestamp);
 				}
 			}
 		}

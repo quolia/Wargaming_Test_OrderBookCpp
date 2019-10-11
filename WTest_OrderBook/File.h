@@ -62,7 +62,7 @@ namespace WG_ORDERBOOK
 			}
 			else
 			{
-				if (!(_stream >> record.timestamp))
+				if (!(_stream >> record._timestamp))
 				{
 					throw exception("Invalid file format.");
 				}
@@ -74,23 +74,23 @@ namespace WG_ORDERBOOK
 					throw exception("Invalid file format.");
 				}
 
-				record.is_insert = 'I' == type;
+				record._is_insert = 'I' == type;
 
-				if (!(_stream >> record.id))
+				if (!(_stream >> record._id))
 				{
 					throw exception("Invalid file format.");
 				}
 
-				if (record.is_insert)
+				if (record._is_insert)
 				{
-					if (!(_stream >> record.price))
+					if (!(_stream >> record._price))
 					{
 						throw exception("Invalid file format.");
 					}
 				}
 				else
 				{
-					record.price = 0;
+					record._price = 0;
 				}
 
 				record.validate();

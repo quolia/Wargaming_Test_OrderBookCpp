@@ -39,18 +39,13 @@ namespace WG_ORDERBOOK
 	class order_book : public order_book_iface
 	{
 		// Types aliases.
-		typedef set<order_item, order_comparer> orders_stack_type;
-		typedef unordered_map<unsigned, order_item> id_map_type;
-		typedef pair<unsigned, order_item> id_map_item_type;
+		typedef set<order_item, order_comparer> orders_container_type;
+		typedef unordered_map<unsigned, order_data> orders_map_type;
+		typedef pair<unsigned, order_data> orders_map_item_type;
+		
+		orders_container_type _orders; /// <summary> Container of orders. </summary>
 
-		/// <summary> Stack of orders sorted by price and then by timestamp. 
-		///           'set' type allows sorting and value uniqness. </summary>
-		orders_stack_type _orders_set;
-
-		id_map_type _id_map; /// <summary> Supporting 'map' to store 'set' iterator for fast deleting from 'set'. </summary>
-
-		// 'set' keeps orders in sort manner.
-		// 'map' keeps pointers to 'set' positions by orders id.
+		orders_map_type _orders_map; /// <summary> Supporting 'map' to store 'set' iterator for fast deleting from 'set'. </summary>
 
 		order_item _null_order; /// <summary> Default order to return is order book is empty. </summary>
 
@@ -71,15 +66,15 @@ namespace WG_ORDERBOOK
 			lock_guard<mutex> lock(_lock);
 
 			// Insert order to the 'set'. It will be automatically inserted to a sort-keep position.
-			auto ret_price = _orders_set.insert(order); // O(log(n))
-			if (!ret_price.second)
+			auto result = _orders.insert(order); // O(log(n))
+			if (!result.second)
 			{
 				throw exception("Cannot insert order.");
 			}
 
 			// Insert order to 'map'.
-			auto ret_id = _id_map.insert(id_map_item_type(order.id(), order)); // O(1)
-			if (!ret_id.second)
+			auto map_result = _orders_map.insert(orders_map_item_type(order.id(), order.data())); // O(1)
+			if (!map_result.second)
 			{
 				throw exception("Cannot insert order with the given id.");
 			}
@@ -92,7 +87,7 @@ namespace WG_ORDERBOOK
 		{
 			lock_guard<mutex> lock(_lock);
 
-			if (!_id_map.size())
+			if (!_orders_map.size())
 			{
 				throw exception("Cannot remove an order from empty book.");
 			}
@@ -103,11 +98,11 @@ namespace WG_ORDERBOOK
 			}
 
 			// Find order in 'map' by order id and remove it.
-			auto order = _id_map.at(id); // O(1)
-			_id_map.erase(id); // O(1)
+			auto order_data = _orders_map.at(id); // O(1)
+			_orders_map.erase(id); // O(1)
 
 			// Remove the order from 'set'.
-			_orders_set.erase(order); // O(log(n))
+			_orders.erase(order_item(id, order_data)); // O(log(n))
 		}
 
 		/// <summary> Returns top-price order. The top-price order is located at the end of 'set'. </summary>
@@ -115,8 +110,8 @@ namespace WG_ORDERBOOK
 		{
 			lock_guard<mutex> lock(_lock);
 
-			auto it = _orders_set.rbegin();
-			return it == _orders_set.rend() ? _null_order : *it;
+			auto it = _orders.rbegin();
+			return it == _orders.rend() ? _null_order : *it;
 		}
 
 		/// <summary> Returns amount of orders in the book. </summary>
@@ -124,7 +119,7 @@ namespace WG_ORDERBOOK
 		{
 			lock_guard<mutex> lock(_lock);
 
-			return _id_map.size();
+			return _orders_map.size();
 		}
 	};
 }
