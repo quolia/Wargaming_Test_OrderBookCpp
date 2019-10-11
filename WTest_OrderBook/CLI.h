@@ -27,6 +27,11 @@ namespace WG_ORDERBOOK
 				throw exception("Invalid parameters count. Example parameters: srcfile");
 			}
 
+			if (!argv)
+			{
+				throw exception("Parameters missing. Example parameters: srcfile");
+			}
+
 			_src_file_name = argv[1];
 		}
 	};

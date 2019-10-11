@@ -5,6 +5,7 @@
 #include <string>
 #include <fstream>
 #include <cstddef>
+#include "OrderItem.h"
 
 namespace WG_ORDERBOOK
 {
@@ -16,11 +17,6 @@ namespace WG_ORDERBOOK
 		ifstream _stream;
 
 	public:
-
-		orders_file()
-		{
-
-		}
 
 		~orders_file()
 		{
@@ -35,7 +31,7 @@ namespace WG_ORDERBOOK
 			}
 		}
 
-		void open_for_read(const string& file_name)
+		void open_for_read(const char* file_name)
 		{
 			close();
 

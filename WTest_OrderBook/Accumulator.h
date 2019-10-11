@@ -31,7 +31,7 @@ namespace WG_ORDERBOOK
 
 		void reset()
 		{
-			_order_book = nullptr;
+			_order_book.reset();
 
 			_accumulator = 0;
 			_last_timestamp = 0;
@@ -40,6 +40,11 @@ namespace WG_ORDERBOOK
 
 		void add_order(order_item& order)
 		{
+			if (!_order_book)
+			{
+				throw exception("Accumulator not inited.");
+			}
+
 			double current_max_price = _order_book->max_price_order().price();
 			if (current_max_price > 0)
 			{
@@ -57,6 +62,11 @@ namespace WG_ORDERBOOK
 
 		void remove_order(unsigned id, timestamp_type timestamp)
 		{
+			if (!_order_book)
+			{
+				throw exception("Accumulator not inited.");
+			}
+
 			const order_item& max_price_order = _order_book->max_price_order();
 			if (max_price_order.id() == id)
 			{
