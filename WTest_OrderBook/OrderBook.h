@@ -23,6 +23,9 @@ namespace WG_ORDERBOOK
 		// Returns top-price order.
 		virtual const order_item& max_price_order() const = 0;
 
+		// Returns amount of orders in the book.
+		virtual size_t size() const = 0;
+
 		// Default virtual destructor to allow implementations instances destructors to be called when deleted as abstract class.
 		virtual ~order_book_iface() = 0 {};
 	};

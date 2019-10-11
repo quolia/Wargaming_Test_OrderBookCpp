@@ -33,7 +33,7 @@ namespace WG_ORDERBOOK
 				throw exception("Invalid order id.");
 			}
 
-			if (timestamp == invalid_timestamp)
+			if (invalid_timestamp == timestamp)
 			{
 				throw exception("Invalid order timestamp.");
 			}

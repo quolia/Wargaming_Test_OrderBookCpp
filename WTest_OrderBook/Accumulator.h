@@ -15,7 +15,10 @@ namespace WG_ORDERBOOK
 		shared_ptr<order_book_iface> _order_book;
 
 		// Accumulated value of prices.
-		double _accumulator;
+		double _accumulator_price;
+
+		// Accumulated value of time.
+		double _accumulator_time;
 
 		// Last time maximum price was changed.
 		timestamp_type _last_timestamp;
@@ -25,6 +28,7 @@ namespace WG_ORDERBOOK
 
 	public:
 
+		// Default ctor.
 		accumulator()
 		{
 			reset();
@@ -41,7 +45,8 @@ namespace WG_ORDERBOOK
 		{
 			_order_book.reset();
 
-			_accumulator = 0;
+			_accumulator_price = 0;
+			_accumulator_time = 0;
 			_last_timestamp = invalid_timestamp;
 			_first_timestamp = invalid_timestamp;
 		}
@@ -51,7 +56,7 @@ namespace WG_ORDERBOOK
 		{
 			// WARNING:
 			// We could validate time consistentcy (straight time line), but in case of multi-threading or
-			// multiple orders providers orders timestamp could be inconsistent.
+			// multiple orders providers timestamps could be inconsistent.
 
 			if (!_order_book)
 			{
@@ -66,7 +71,7 @@ namespace WG_ORDERBOOK
 			{
 				if (current_max_price > 0)
 				{
-					_accumulator += current_max_price * (order.timestamp() - _last_timestamp);
+					_accumulator_price += current_max_price * (order.timestamp() - _last_timestamp);
 				}
 
 				// Update last timestamp of top-price order changing.
@@ -77,7 +82,7 @@ namespace WG_ORDERBOOK
 
 			// If this is first order than remember it's timestamp to calculate duration at the end.
 
-			if (_first_timestamp == invalid_timestamp)
+			if (invalid_timestamp == _first_timestamp)
 			{
 				_first_timestamp = order.timestamp();
 			}
@@ -97,25 +102,24 @@ namespace WG_ORDERBOOK
 			if (max_price_order.id() == id)
 			{
 				// Accumulate top-price order time and update time of top-price order changing.
-				_accumulator += max_price_order.price() * (timestamp - _last_timestamp);
+				_accumulator_price += max_price_order.price() * (timestamp - _last_timestamp);
 				_last_timestamp = timestamp;
 			}
 
 			// Remove the order from the book.
 			_order_book->remove(id, timestamp);
+
+			if (0 == _order_book->size())
+			{
+				_accumulator_time += (timestamp - _first_timestamp);
+				_first_timestamp = invalid_timestamp;
+			}
 		}
 
 		// Returns time-weighted average highest price of orders.
 		double average_highest_price() const
 		{
-			if (_last_timestamp == invalid_timestamp || _first_timestamp == invalid_timestamp)
-			{
-				return 0;
-			}
-			else
-			{
-				return _last_timestamp == _first_timestamp ? 0 : _accumulator / (_last_timestamp - _first_timestamp);
-			}
+			return 0 == _accumulator_time ? 0 : _accumulator_price / _accumulator_time;
 		}
 	};
 }
