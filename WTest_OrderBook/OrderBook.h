@@ -40,12 +40,12 @@ namespace WG_ORDERBOOK
 	{
 		// Types aliases.
 		typedef set<order_item, order_comparer> orders_stack_type;
-		typedef unordered_map<unsigned, orders_stack_type::iterator> id_map_type;
-		typedef pair<unsigned, orders_stack_type::iterator> id_map_item_type;
+		typedef unordered_map<unsigned, order_item> id_map_type;
+		typedef pair<unsigned, order_item> id_map_item_type;
 
 		/// <summary> Stack of orders sorted by price and then by timestamp. 
 		///           'set' type allows sorting and value uniqness. </summary>
-		orders_stack_type _orders_stack;
+		orders_stack_type _orders_set;
 
 		id_map_type _id_map; /// <summary> Supporting 'map' to store 'set' iterator for fast deleting from 'set'. </summary>
 
@@ -71,14 +71,14 @@ namespace WG_ORDERBOOK
 			lock_guard<mutex> lock(_lock);
 
 			// Insert order to the 'set'. It will be automatically inserted to a sort-keep position.
-			auto ret_price = _orders_stack.insert(order); // O(log(n))
+			auto ret_price = _orders_set.insert(order); // O(log(n))
 			if (!ret_price.second)
 			{
 				throw exception("Cannot insert order.");
 			}
 
-			// Insert 'set' iterator to 'map'.
-			auto ret_id = _id_map.insert(id_map_item_type(order.id(), ret_price.first)); // O(1)
+			// Insert order to 'map'.
+			auto ret_id = _id_map.insert(id_map_item_type(order.id(), order)); // O(1)
 			if (!ret_id.second)
 			{
 				throw exception("Cannot insert order with the given id.");
@@ -88,7 +88,7 @@ namespace WG_ORDERBOOK
 		/// <summary> Removes order. </summary>
 		/// <param name="id"> Previously added order id. </param>
 		/// <param name="timestamp"> Current timestamp. </param>
-		virtual void remove(unsigned id, timestamp_type timestamp) // O(1)
+		virtual void remove(unsigned id, timestamp_type timestamp) // O(log(n))
 		{
 			lock_guard<mutex> lock(_lock);
 
@@ -102,12 +102,12 @@ namespace WG_ORDERBOOK
 				throw exception("Invalid order id.");
 			}
 
-			// Find 'set' iterator in 'map' by order id and remove the pair id/iterator.
-			auto it = _id_map.at(id); // O(1)
+			// Find order in 'map' by order id and remove it.
+			auto order = _id_map.at(id); // O(1)
 			_id_map.erase(id); // O(1)
 
-			// Remove the iterator from 'set'.
-			_orders_stack.erase(it); // O(log(n))
+			// Remove the order from 'set'.
+			_orders_set.erase(order); // O(log(n))
 		}
 
 		/// <summary> Returns top-price order. The top-price order is located at the end of 'set'. </summary>
@@ -115,8 +115,8 @@ namespace WG_ORDERBOOK
 		{
 			lock_guard<mutex> lock(_lock);
 
-			auto it = _orders_stack.rbegin();
-			return it == _orders_stack.rend() ? _null_order : *it;
+			auto it = _orders_set.rbegin();
+			return it == _orders_set.rend() ? _null_order : *it;
 		}
 
 		/// <summary> Returns amount of orders in the book. </summary>
