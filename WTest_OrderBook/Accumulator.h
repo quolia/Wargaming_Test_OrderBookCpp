@@ -50,12 +50,16 @@ namespace WG_ORDERBOOK
 			}
 
 			double current_max_price = _order_book->max_price_order().price();
-			if (current_max_price > 0)
+			if (current_max_price > 0 && order.price() > current_max_price)
 			{
 				_accumulator += current_max_price * (order.timestamp() - _last_timestamp);
 			}
+			
+			if (order.price() > current_max_price)
+			{
+				_last_timestamp = order.timestamp();
+			}
 
-			_last_timestamp = order.timestamp();
 			_order_book->add(order);
 
 			if (_first_timestamp == 0)

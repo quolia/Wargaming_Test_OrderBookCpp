@@ -181,6 +181,11 @@
     <Text Include="TestOrders\invalid.txt" />
     <Text Include="TestOrders\valid10.5.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WTest_OrderBook\WTest_OrderBook.vcxproj">
+      <Project>{0e4f4f64-0248-4d27-b793-f697bfb0e24f}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
