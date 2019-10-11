@@ -22,7 +22,7 @@ namespace UnitTests
 
 				Assert::Fail(L"Exception missing.");
 			}
-			catch (const exception & e)
+			catch (const exception&)
 			{
 				//
 			}
@@ -38,7 +38,7 @@ namespace UnitTests
 
 				Assert::Fail(L"Exception missing.");
 			}
-			catch (const exception & e)
+			catch (const exception&)
 			{
 				//
 			}
@@ -76,7 +76,7 @@ namespace UnitTests
 				acc.remove_order(1, 1);
 				Assert::Fail(L"Exception missing.");
 			}
-			catch (const exception & e)
+			catch (const exception&)
 			{
 				//
 			}
@@ -97,7 +97,7 @@ namespace UnitTests
 				acc.remove_order(2, 1);
 				Assert::Fail(L"Exception missing.");
 			}
-			catch (const exception & e)
+			catch (const exception&)
 			{
 				//
 			}

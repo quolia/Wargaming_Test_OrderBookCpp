@@ -8,15 +8,15 @@ namespace WG_ORDERBOOK
 {
 	using namespace std;
 
-	// Order record in source file.
+	/// <summary> Order record in source file. </summary>
 	struct order_record
 	{
-		timestamp_type timestamp;
-		unsigned id;
-		bool is_insert;
-		double price;
+		unsigned id;				/// <summary> Order id. </summary>
+		timestamp_type timestamp;	/// <summary> Order timestamp. </summary>
+		bool is_insert;				/// <summary> Is insert operation. </summary>
+		double price;				/// <summary> Order price (valid for insert operation). </summary>
 
-		// Default ctor.
+		/// <summary> Default ctor. </summary>
 		order_record() noexcept
 		{
 			timestamp = invalid_timestamp;
@@ -25,7 +25,7 @@ namespace WG_ORDERBOOK
 			price = 0;
 		}
 
-		// Validates order record data.
+		/// <summary> Validates order record data. </summary>
 		void validate()
 		{
 			if (id < 1)
@@ -50,65 +50,66 @@ namespace WG_ORDERBOOK
 		}
 	};
 
-	// Order item class.
+	/// <summary> Order item class. </summary>
 	class order_item
 	{
-		unsigned _id;
-		double _price;
-		timestamp_type _timestamp;
+		unsigned _id;				/// <summary> Order id. </summary>
+		double _price;				/// <summary> Order price. </summary>
+		timestamp_type _timestamp;	/// <summary> Order timestamp. </summary>
 
 	public:
 
-		// Default ctor.
+		/// <summary> Default ctor. </summary>
 		order_item() noexcept
+			: _id(0), _timestamp(invalid_timestamp), _price(0)
 		{
-			_id = 0;
-			_timestamp = invalid_timestamp;
-			_price = 0;
+			//
 		}
 
-		// Data ctor.
+		/// <summary> Data ctor. </summary>
+		/// <param name="id"> Order id. </param>
+		/// <param name="timestamp"> Order timestamp. </param>
+		/// <param name="price"> Order price. </param>
 		order_item(unsigned id, timestamp_type timestamp, double price) noexcept
+			: _id(id), _timestamp(timestamp), _price(price)
 		{
-			_id = id;
-			_timestamp = timestamp;
-			_price = price;
+			//
 		}
 
-		// Copy ctor to copy from order record.
+		/// <summary> Copy ctor to copy from order record. </summary>
+		/// <param name="record"> Record to make order copy from. </param>
 		order_item(const order_record& record) noexcept
+			: _id(record.id), _timestamp(record.timestamp), _price(record.price)
 		{
-			_id = record.id;
-			_timestamp = record.timestamp;
-			_price = record.price;
+			//
 		}
 
-		// Returns order id.
+		/// <summary> Returns order id. </summary>
 		unsigned id() const noexcept
 		{
 			return _id;
 		}
 
-		// Returns order price.
+		/// <summary> Returns order price. </summary>
 		double price() const noexcept
 		{
 			return _price;
 		}
 
-		// Returns order timestamp.
+		/// <summary> Returns order timestamp. </summary>
 		timestamp_type timestamp() const noexcept
 		{
 			return _timestamp;
 		}
 	};
 
-	// Comparer to use in set to sort items by price and timestamp.
+	/// <summary> Comparer to use in set to sort items by price and timestamp (functor). </summary>
 	class order_comparer
 	{
 	public:
 		bool operator()(const order_item& l, const order_item& r) const noexcept
 		{
-			// If the prices are equal than compare timestamp.
+			// If the prices are equal than compare timestamps.
 			return l.price() == r.price() ? l.timestamp() < r.timestamp() : l.price() < r.price();
 		}
 	};

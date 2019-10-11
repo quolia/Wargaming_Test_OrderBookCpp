@@ -11,27 +11,31 @@ namespace WG_ORDERBOOK
 {
 	using namespace std;
 
-	// Interface for order book implementation.
+	/// <summary> Interface for order book implementation. </summary>
 	class order_book_iface
 	{
 	public:
-		// Adds order.
-		virtual void add(order_item& order) = 0;
 
-		// Removes order.
+		/// <summary> Adds order. </summary>
+		/// <param name="order"> Order to add. </param>
+		virtual void add(order_item& order) = 0; 
+
+		/// <summary> Removes order. </summary>
+		/// <param name="id"> Previously added order id. </param>
+		/// <param name="timestamp"> Current timestamp. </param>
 		virtual void remove(unsigned id, timestamp_type timestamp) = 0;
 
-		// Returns top-price order.
+		/// <summary> Returns top-price order. </summary>
 		virtual const order_item& max_price_order() = 0;
 
-		// Returns amount of orders in the book.
+		/// <summary> Returns amount of orders in the book. </summary>
 		virtual size_t size() = 0;
 
-		// Default virtual destructor to allow implementations instances destructors to be called when deleted as abstract class.
+		/// <summary> Default virtual destructor to allow implementations instances destructors to be called when deleted as abstract class. </summary>
 		virtual ~order_book_iface() = 0 {};
 	};
 
-	// Default implementation for order book interface.
+	/// <summary> Default implementation for order book interface. </summary>
 	class order_book : public order_book_iface
 	{
 		// Types aliases.
@@ -39,31 +43,29 @@ namespace WG_ORDERBOOK
 		typedef unordered_map<unsigned, orders_stack_type::iterator> id_map_type;
 		typedef pair<unsigned, orders_stack_type::iterator> id_map_item_type;
 
-		// Stack of orders sorted by price and then by timestamp.
-		// 'set' type allows sorting and value uniqness.
+		/// <summary> Stack of orders sorted by price and then by timestamp. 
+		///           'set' type allows sorting and value uniqness. </summary>
 		orders_stack_type _orders_stack;
 
-		// Supporting 'map' to store 'set' iterator for fast deleting from 'set'.
-		id_map_type _id_map;
+		id_map_type _id_map; /// <summary> Supporting 'map' to store 'set' iterator for fast deleting from 'set'. </summary>
 
 		// 'set' keeps orders in sort manner.
 		// 'map' keeps pointers to 'set' positions by orders id.
 
-		// Default order to return is order book is empty.
-		order_item _null_order;
+		order_item _null_order; /// <summary> Default order to return is order book is empty. </summary>
 
-		// Operations mutex.
-		mutex _lock;
+		mutex _lock; /// <summary> Operations mutex. </summary>
 
 	public:
 
-		// Default ctor.
+		/// <summary> Default ctor. </summary>
 		order_book() noexcept
 		{
 			//
 		}
 
-		// Adds order.
+		/// <summary> Adds order. </summary>
+		/// <param name="order"> Order to add. </param>
 		virtual void add(order_item& order) // O(log(n))
 		{
 			lock_guard<mutex> lock(_lock);
@@ -83,7 +85,9 @@ namespace WG_ORDERBOOK
 			}
 		}
 
-		// Removes order.
+		/// <summary> Removes order. </summary>
+		/// <param name="id"> Previously added order id. </param>
+		/// <param name="timestamp"> Current timestamp. </param>
 		virtual void remove(unsigned id, timestamp_type timestamp) // O(1)
 		{
 			lock_guard<mutex> lock(_lock);
@@ -106,8 +110,7 @@ namespace WG_ORDERBOOK
 			_orders_stack.erase(it); // O(log(n))
 		}
 
-		// Returns max price order or default order.
-		// The top-price order is located at the end of 'set'.
+		/// <summary> Returns top-price order. The top-price order is located at the end of 'set'. </summary>
 		virtual const order_item& max_price_order() noexcept
 		{
 			lock_guard<mutex> lock(_lock);
@@ -116,7 +119,7 @@ namespace WG_ORDERBOOK
 			return it == _orders_stack.rend() ? _null_order : *it;
 		}
 
-		// Amount of orders in the book.
+		/// <summary> Returns amount of orders in the book. </summary>
 		virtual size_t size() noexcept
 		{
 			lock_guard<mutex> lock(_lock);

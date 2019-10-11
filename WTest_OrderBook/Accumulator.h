@@ -3,48 +3,43 @@
 #define _WTEST_ACCUM_H
 
 #include <mutex>
-#include "OrderItem.h"
 #include "OrderBook.h"
 
 namespace WG_ORDERBOOK
 {
 	using namespace std;
 
+	/// <summary> Orders time and price accumulator. </summary>
 	class accumulator
 	{
-		// Pointer to underlying order book container.
-		shared_ptr<order_book_iface> _order_book;
+		shared_ptr<order_book_iface> _order_book; /// <summary> Pointer to underlying order book container. </summary>
 
-		// Accumulated value of prices.
-		double _accumulator_price;
+		double _accumulator_price; /// <summary> Accumulated value of prices. </summary>
+		
+		unsigned long long _accumulator_time; /// <summary> Accumulated value of time. </summary>
+		
+		timestamp_type _last_timestamp; /// <summary> Last time maximum price was changed. </summary>
 
-		// Accumulated value of time.
-		double _accumulator_time;
-
-		// Last time maximum price was changed.
-		timestamp_type _last_timestamp;
-
-		// First order timestamp (after start or time gap). 
-		timestamp_type _first_timestamp;
-
-		// Operations mutex.
-		mutex _lock;
+		timestamp_type _first_timestamp; /// <summary> First order timestamp (after start or time gap). </summary>
+		
+		mutex _lock; /// <summary> Operations mutex. </summary>
 
 	public:
 
-		// Default ctor.
+		/// <summary> Default ctor. </summary>
 		accumulator() noexcept
 		{
 			reset();
 		}
 
-		// Init accumulator with order book interface.
+		/// <summary> Init accumulator with order book interface. </summary>
+		/// <param name="order_book"> Order book interface. </param>
 		void init(shared_ptr<order_book_iface>& order_book) noexcept
 		{
 			_order_book = order_book;
 		}
 
-		// Reset accumulator state.
+		/// <summary> Reset accumulator state. </summary>
 		void reset() noexcept
 		{
 			lock_guard<mutex> lock(_lock);
@@ -57,7 +52,8 @@ namespace WG_ORDERBOOK
 			_first_timestamp = invalid_timestamp;
 		}
 
-		// Add order to accumulator.
+		/// <summary> Adds order to accumulator. </summary>
+		/// <param name="order"> Order to add. </param>
 		void add_order(order_item& order)
 		{
 			// WARNING:
@@ -96,7 +92,9 @@ namespace WG_ORDERBOOK
 			}
 		}
 
-		// Remove order from accumulator.
+		/// <summary> Removes order from accumulator. </summary>
+		/// <param name="id"> Previously added order id. </param>
+		/// <param name="timestamp"> Current timestamp. </param>
 		void remove_order(unsigned id, timestamp_type timestamp)
 		{
 			lock_guard<mutex> lock(_lock);
@@ -126,7 +124,8 @@ namespace WG_ORDERBOOK
 			}
 		}
 
-		// Returns time-weighted average highest price of orders.
+		/// <summary> Returns time-weighted average highest price of orders. </summary>
+		/// <returns> Time-weighted average highest price of orders. </returns>
 		double average_highest_price() noexcept
 		{
 			lock_guard<mutex> lock(_lock);

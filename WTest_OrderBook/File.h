@@ -11,20 +11,20 @@ namespace WG_ORDERBOOK
 {
 	using namespace std;
 
-	// Simple wrapper for a file.
+	/// <summary> Simple wrapper for a file. </summary>
 	class orders_file
 	{
-		// Stream to read.
-		ifstream _stream;
+		ifstream _stream; /// <summary> Stream to read. </summary>
 
 	public:
 
+		/// <summary> Dtor. </summary>
 		~orders_file() noexcept
 		{
 			close();
 		}
 
-		// Close file if opened.
+		/// <summary> Close file if opened. </summary>
 		void close() noexcept
 		{
 			if (is_opened())
@@ -33,7 +33,8 @@ namespace WG_ORDERBOOK
 			}
 		}
 
-		// Opens file for read.
+		/// <summary> Opens file for read. </summary>
+		/// <param name="file_name"> File name to open. </param>
 		void open_for_read(const char* file_name)
 		{
 			close();
@@ -45,7 +46,9 @@ namespace WG_ORDERBOOK
 			}
 		}
 
-		// Reads and validate orders records.
+		/// <summary> Reads and validate orders records. </summary>
+		/// <param name="record"> Reference to a record to write data in. </param>
+		/// <returns> Returns false if end of file reached, true otherwise. </returns>
 		bool read_order_record(order_record& record)
 		{
 			if (!is_opened())
@@ -96,7 +99,8 @@ namespace WG_ORDERBOOK
 			}
 		}
 
-		// Checks if file is opened.
+		/// <summary> Checks if file is opened. </summary>
+		/// <returns> Returns true if the file is in opened state. </returns>
 		bool const is_opened() noexcept
 		{
 			return _stream.is_open();
