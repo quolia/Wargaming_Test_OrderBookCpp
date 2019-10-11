@@ -19,13 +19,13 @@ namespace WG_ORDERBOOK
 
 	public:
 
-		~orders_file()
+		~orders_file() noexcept
 		{
 			close();
 		}
 
 		// Close file if opened.
-		void close()
+		void close() noexcept
 		{
 			if (is_opened())
 			{
@@ -97,7 +97,7 @@ namespace WG_ORDERBOOK
 		}
 
 		// Checks if file is opened.
-		bool const is_opened()
+		bool const is_opened() noexcept
 		{
 			return _stream.is_open();
 		}

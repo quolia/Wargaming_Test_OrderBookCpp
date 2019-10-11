@@ -17,7 +17,7 @@ namespace WG_ORDERBOOK
 		double price;
 
 		// Default ctor.
-		order_record()
+		order_record() noexcept
 		{
 			timestamp = invalid_timestamp;
 			id = 0;
@@ -60,7 +60,7 @@ namespace WG_ORDERBOOK
 	public:
 
 		// Default ctor.
-		order_item()
+		order_item() noexcept
 		{
 			_id = 0;
 			_timestamp = invalid_timestamp;
@@ -68,7 +68,7 @@ namespace WG_ORDERBOOK
 		}
 
 		// Data ctor.
-		order_item(unsigned id, timestamp_type timestamp, double price)
+		order_item(unsigned id, timestamp_type timestamp, double price) noexcept
 		{
 			_id = id;
 			_timestamp = timestamp;
@@ -76,7 +76,7 @@ namespace WG_ORDERBOOK
 		}
 
 		// Copy ctor to copy from order record.
-		order_item(const order_record& record)
+		order_item(const order_record& record) noexcept
 		{
 			_id = record.id;
 			_timestamp = record.timestamp;
@@ -84,19 +84,19 @@ namespace WG_ORDERBOOK
 		}
 
 		// Returns order id.
-		unsigned id() const
+		unsigned id() const noexcept
 		{
 			return _id;
 		}
 
 		// Returns order price.
-		double price() const
+		double price() const noexcept
 		{
 			return _price;
 		}
 
 		// Returns order timestamp.
-		timestamp_type timestamp() const
+		timestamp_type timestamp() const noexcept
 		{
 			return _timestamp;
 		}
@@ -106,7 +106,7 @@ namespace WG_ORDERBOOK
 	class order_comparer
 	{
 	public:
-		bool operator()(const order_item& l, const order_item& r) const
+		bool operator()(const order_item& l, const order_item& r) const noexcept
 		{
 			// If the prices are equal than compare timestamp.
 			return l.price() == r.price() ? l.timestamp() < r.timestamp() : l.price() < r.price();

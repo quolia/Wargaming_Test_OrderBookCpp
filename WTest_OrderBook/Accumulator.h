@@ -2,6 +2,7 @@
 #ifndef _WTEST_ACCUM_H
 #define _WTEST_ACCUM_H
 
+#include <mutex>
 #include "OrderItem.h"
 #include "OrderBook.h"
 
@@ -23,26 +24,31 @@ namespace WG_ORDERBOOK
 		// Last time maximum price was changed.
 		timestamp_type _last_timestamp;
 
-		// First order timestamp. 
+		// First order timestamp (after start or time gap). 
 		timestamp_type _first_timestamp;
+
+		// Operations mutex.
+		mutex _lock;
 
 	public:
 
 		// Default ctor.
-		accumulator()
+		accumulator() noexcept
 		{
 			reset();
 		}
 
 		// Init accumulator with order book interface.
-		void init(shared_ptr<order_book_iface>& order_book)
+		void init(shared_ptr<order_book_iface>& order_book) noexcept
 		{
 			_order_book = order_book;
 		}
 
 		// Reset accumulator state.
-		void reset()
+		void reset() noexcept
 		{
+			lock_guard<mutex> lock(_lock);
+
 			_order_book.reset();
 
 			_accumulator_price = 0;
@@ -57,6 +63,8 @@ namespace WG_ORDERBOOK
 			// WARNING:
 			// We could validate time consistentcy (straight time line), but in case of multi-threading or
 			// multiple orders providers timestamps could be inconsistent.
+
+			lock_guard<mutex> lock(_lock);
 
 			if (!_order_book)
 			{
@@ -91,6 +99,8 @@ namespace WG_ORDERBOOK
 		// Remove order from accumulator.
 		void remove_order(unsigned id, timestamp_type timestamp)
 		{
+			lock_guard<mutex> lock(_lock);
+
 			if (!_order_book)
 			{
 				throw exception("Accumulator not inited.");
@@ -117,8 +127,10 @@ namespace WG_ORDERBOOK
 		}
 
 		// Returns time-weighted average highest price of orders.
-		double average_highest_price() const
+		double average_highest_price() noexcept
 		{
+			lock_guard<mutex> lock(_lock);
+
 			return 0 == _accumulator_time ? 0 : _accumulator_price / _accumulator_time;
 		}
 	};

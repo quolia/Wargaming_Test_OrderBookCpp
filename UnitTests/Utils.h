@@ -15,6 +15,8 @@ public:
 
 	static wstring widen(const string& str)
 	{
+		//https://stackoverflow.com/questions/30409350/convert-const-char-to-const-wchar-t
+
 		wostringstream wstm;
 		const ctype<wchar_t>& ctfacet = use_facet<ctype<wchar_t>>(wstm.getloc());
 		for (size_t i = 0; i < str.size(); ++i)
@@ -26,6 +28,8 @@ public:
 
 	static string narrow(const wstring& str)
 	{
+		//https://stackoverflow.com/questions/30409350/convert-const-char-to-const-wchar-t
+
 		ostringstream stm;
 		const ctype<char>& ctfacet = use_facet<ctype<char>>(stm.getloc());
 		for (size_t i = 0; i < str.size(); ++i)

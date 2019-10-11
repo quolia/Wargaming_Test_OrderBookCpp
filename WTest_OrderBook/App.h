@@ -29,7 +29,7 @@ namespace WG_ORDERBOOK
 	
 	public:
 
-		application()
+		application() noexcept
 		{
 			_is_inited = false;
 		}
@@ -76,7 +76,7 @@ namespace WG_ORDERBOOK
 		}
 
 		// Returns time-weighted average highest price of orders.
-		double average_highest_price() const
+		double average_highest_price()
 		{
 			if (!_is_inited)
 			{

@@ -16,7 +16,7 @@ namespace WG_ORDERBOOK
 	public:
 
 		// Source file name.
-		const char* src_file_name() const
+		const char* src_file_name() const noexcept
 		{
 			return _src_file_name.c_str();
 		}
