@@ -21,7 +21,7 @@ namespace UnitTests
 
 				Assert::Fail(L"Exception missing.");
 			}
-			catch (const exception & e)
+			catch (const exception&)
 			{
 				//
 			}
@@ -36,7 +36,7 @@ namespace UnitTests
 
 				Assert::Fail(L"Exception missing.");
 			}
-			catch (const exception & e)
+			catch (const exception&)
 			{
 				//
 			}
@@ -53,7 +53,7 @@ namespace UnitTests
 
 				Assert::Fail(L"Exception missing.");
 			}
-			catch (const exception & e)
+			catch (const exception&)
 			{
 				//
 			}
@@ -68,7 +68,7 @@ namespace UnitTests
 
 				Assert::Fail(L"Exception missing.");
 			}
-			catch (const exception & e)
+			catch (const exception&)
 			{
 				//
 			}
@@ -83,7 +83,7 @@ namespace UnitTests
 
 				Assert::Fail(L"Exception missing.");
 			}
-			catch (const exception & e)
+			catch (const exception&)
 			{
 				//
 			}
@@ -100,7 +100,7 @@ namespace UnitTests
 				app.run();
 				Assert::IsTrue(app.average_highest_price() == 10.5, L"Incorrect result.");
 			}
-			catch (const exception & e)
+			catch (const exception& e)
 			{
 				string str = e.what();
 				Assert::Fail(utils::widen(str).c_str());

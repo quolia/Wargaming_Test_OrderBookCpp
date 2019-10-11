@@ -69,12 +69,12 @@ namespace WG_ORDERBOOK
 
 				char type;
 
-				if (!(_stream >> type) || (type != 'I' && type != 'E'))
+				if (!(_stream >> type) || ('I' != type && 'E' != type))
 				{
 					throw exception("Invalid file format.");
 				}
 
-				record.is_insert = type == 'I';
+				record.is_insert = 'I' == type;
 
 				if (!(_stream >> record.id))
 				{

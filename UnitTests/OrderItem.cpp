@@ -21,7 +21,8 @@ namespace UnitTests
 
 			Assert::IsTrue(less(o1, o2), L"Incorrect compare 1.");
 			Assert::IsTrue(less(o2, o3), L"Incorrect compare 2.");
-			Assert::IsFalse(less(o3, o4), L"Incorrect compare 3.");
+			Assert::IsTrue(less(o3, o4), L"Incorrect compare 3.");
+			Assert::IsFalse(less(o4, o4), L"Incorrect compare 4.");
 		}
 	};
 }

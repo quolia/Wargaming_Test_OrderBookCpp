@@ -18,11 +18,9 @@ namespace WG_ORDERBOOK
 
 		/// <summary> Default ctor. </summary>
 		order_record() noexcept
+			: id(0), timestamp(invalid_timestamp), is_insert(false), price(0)
 		{
-			timestamp = invalid_timestamp;
-			id = 0;
-			is_insert = false;
-			price = 0;
+			//
 		}
 
 		/// <summary> Validates order record data. </summary>
@@ -109,8 +107,30 @@ namespace WG_ORDERBOOK
 	public:
 		bool operator()(const order_item& l, const order_item& r) const noexcept
 		{
-			// If the prices are equal than compare timestamps.
-			return l.price() == r.price() ? l.timestamp() < r.timestamp() : l.price() < r.price();
+			// If the prices are equal than compare timestamps and than ids.
+
+			if (l.price() == r.price())
+			{
+				if (l.timestamp() == r.timestamp())
+				{
+					if (l.id() == r.id())
+					{
+						return false; // The same order is always not less than itself.
+					}
+					else
+					{
+						return l.id() < r.id();
+					}
+				}
+				else
+				{
+					return l.timestamp() < r.timestamp();
+				}
+			}
+			else
+			{
+				return l.price() < r.price();
+			}
 		}
 	};
 }

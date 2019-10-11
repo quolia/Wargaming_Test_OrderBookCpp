@@ -58,7 +58,7 @@ namespace WG_ORDERBOOK
 		{
 			// WARNING:
 			// We could validate time consistentcy (straight time line), but in case of multi-threading or
-			// multiple orders providers timestamps could be inconsistent.
+			// multiple orders providers the time line could be inconsistent.
 
 			lock_guard<mutex> lock(_lock);
 

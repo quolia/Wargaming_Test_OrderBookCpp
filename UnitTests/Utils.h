@@ -34,7 +34,7 @@ public:
 		const ctype<char>& ctfacet = use_facet<ctype<char>>(stm.getloc());
 		for (size_t i = 0; i < str.size(); ++i)
 		{
-			stm << ctfacet.narrow(str[i], 0);
+			stm << ctfacet.narrow((char)str[i], 0);
 		}
 		return stm.str();
 	}

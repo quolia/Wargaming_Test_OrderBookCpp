@@ -20,7 +20,7 @@ namespace UnitTests
 				file.open_for_read("not_exists.txt");
 				Assert::Fail(L"Exception missing.");
 			}
-			catch (const exception & e)
+			catch (const exception&)
 			{
 				//
 			}
@@ -35,7 +35,7 @@ namespace UnitTests
 				file.open_for_read("not_exists.txt");
 				Assert::Fail(L"Exception missing.");
 			}
-			catch (const exception & e)
+			catch (const exception&)
 			{
 				Assert::IsFalse(file.is_opened(), L"File is opened.");
 			}
@@ -51,7 +51,7 @@ namespace UnitTests
 				file.read_order_record(order);
 				Assert::Fail(L"Exception missing.");
 			}
-			catch (const exception & e)
+			catch (const exception&)
 			{
 				//
 			}
@@ -65,7 +65,7 @@ namespace UnitTests
 				file.open_for_read("../UnitTests/TestOrders/valid10.5.txt");
 				file.close();
 			}
-			catch (const exception & e)
+			catch (const exception& e)
 			{
 				string str = e.what();
 				Assert::Fail(utils::widen(str).c_str());
@@ -85,7 +85,7 @@ namespace UnitTests
 				file.read_order_record(order);
 				Assert::Fail(L"Exception missing.");
 			}
-			catch (const exception & e)
+			catch (const exception&)
 			{
 				//
 			}
@@ -100,7 +100,7 @@ namespace UnitTests
 				order_record order;
 				Assert::IsFalse(file.read_order_record(order), L"Read from empty.");
 			}
-			catch (const exception & e)
+			catch (const exception&)
 			{
 				//
 			}

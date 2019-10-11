@@ -56,7 +56,7 @@ namespace UnitTests
 				order_item order;
 				acc.add_order(order);
 			}
-			catch (const exception & e)
+			catch (const exception& e)
 			{
 				string str = e.what();
 				Assert::Fail(utils::widen(str).c_str());
@@ -126,7 +126,7 @@ namespace UnitTests
 				acc.add_order(o1);
 				acc.remove_order(o1.id(), 2000);
 			}
-			catch (const exception & e)
+			catch (const exception& e)
 			{
 				string str = e.what();
 				Assert::Fail(utils::widen(str).c_str());
@@ -152,7 +152,7 @@ namespace UnitTests
 				acc.remove_order(o2.id(), 3000);
 				acc.remove_order(o1.id(), 4000);
 			}
-			catch (const exception & e)
+			catch (const exception& e)
 			{
 				string str = e.what();
 				Assert::Fail(utils::widen(str).c_str());
@@ -178,7 +178,7 @@ namespace UnitTests
 				acc.remove_order(o2.id(), 3000);
 				acc.remove_order(o1.id(), 4000);
 			}
-			catch (const exception & e)
+			catch (const exception& e)
 			{
 				string str = e.what();
 				Assert::Fail(utils::widen(str).c_str());
@@ -204,7 +204,7 @@ namespace UnitTests
 				acc.remove_order(o1.id(), 3000);
 				acc.remove_order(o2.id(), 4000);
 			}
-			catch (const exception & e)
+			catch (const exception& e)
 			{
 				string str = e.what();
 				Assert::Fail(utils::widen(str).c_str());
@@ -230,7 +230,7 @@ namespace UnitTests
 				acc.remove_order(o1.id(), 3000);
 				acc.remove_order(o2.id(), 4000);
 			}
-			catch (const exception & e)
+			catch (const exception& e)
 			{
 				string str = e.what();
 				Assert::Fail(utils::widen(str).c_str());
@@ -258,7 +258,7 @@ namespace UnitTests
 				acc.add_order(o2);
 				acc.remove_order(o2.id(), 4000);
 			}
-			catch (const exception & e)
+			catch (const exception& e)
 			{
 				string str = e.what();
 				Assert::Fail(utils::widen(str).c_str());
@@ -292,7 +292,7 @@ namespace UnitTests
 				acc.add_order(o3);
 				acc.remove_order(o3.id(), 6000);
 			}
-			catch (const exception & e)
+			catch (const exception& e)
 			{
 				string str = e.what();
 				Assert::Fail(utils::widen(str).c_str());

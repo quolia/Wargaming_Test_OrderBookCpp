@@ -20,7 +20,7 @@ namespace UnitTests
 
 				Assert::Fail(L"Exception missing.");
 			}
-			catch (const exception & e)
+			catch (const exception&)
 			{
 				//
 			}
@@ -35,7 +35,7 @@ namespace UnitTests
 
 				Assert::Fail(L"Exception missing.");
 			}
-			catch (const exception & e)
+			catch (const exception&)
 			{
 				//
 			}

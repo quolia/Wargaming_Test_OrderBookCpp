@@ -97,12 +97,12 @@ namespace WG_ORDERBOOK
 				throw exception("Cannot remove an order from empty book.");
 			}
 
-			if (id == 0)
+			if (0 == id)
 			{
 				throw exception("Invalid order id.");
 			}
 
-			// Find 'set' iterator in 'map' by order id and remove the pair.
+			// Find 'set' iterator in 'map' by order id and remove the pair id/iterator.
 			auto it = _id_map.at(id); // O(1)
 			_id_map.erase(id); // O(1)
 

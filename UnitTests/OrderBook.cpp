@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 #include "../WTest_OrderBook/OrderBook.h"
+#include "Utils.h"
 using namespace WG_ORDERBOOK;
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
@@ -36,7 +37,7 @@ namespace UnitTests
 				book.remove(1, 1);
 				Assert::Fail(L"Exception missing.");
 			}
-			catch (const exception & e)
+			catch (const exception&)
 			{
 				//
 			}
@@ -52,7 +53,7 @@ namespace UnitTests
 				book.remove(2, 1);
 				Assert::Fail(L"Exception missing.");
 			}
-			catch (const exception & e)
+			catch (const exception&)
 			{
 				//
 			}
@@ -74,9 +75,27 @@ namespace UnitTests
 				book.add(order);
 				Assert::Fail(L"Exception missing.");
 			}
-			catch (const exception & e)
+			catch (const exception&)
 			{
 				//
+			}
+		}
+
+		TEST_METHOD(Test_OrderBook_add_same_price_and_time)
+		{
+			try
+			{
+				order_item o1(1, 1, 1);
+				order_item o2(2, 1, 1);
+
+				order_book book;
+				book.add(o1);
+				book.add(o2);
+			}
+			catch (const exception& e)
+			{
+				string str = e.what();
+				Assert::Fail(utils::widen(str).c_str());
 			}
 		}
 
