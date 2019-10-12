@@ -382,5 +382,38 @@ namespace UnitTests
 
 			Assert::IsTrue(acc.average_highest_price() == 40000 / (double)3000);
 		}
+
+		TEST_METHOD(Test_Accumulator_load_test)
+		{
+			accumulator acc;
+			try
+			{
+				shared_ptr<order_book_iface> ptr(new order_book());
+				acc.init(ptr);
+
+				const unsigned count = 100000;
+
+				timestamp_type time = 0;
+
+				for (unsigned i = 1; i <= count; ++i)
+				{
+					time += rand() % 5000;
+
+					order_item o(i, time, rand() / 100);
+					acc.add_order(o);
+				}
+
+				for (unsigned i = 1; i <= count; ++i)
+				{
+					time += rand() % 5000;
+					acc.remove_order(i, time);
+				}
+			}
+			catch (const exception & e)
+			{
+				string str = e.what();
+				Assert::Fail(utils::widen(str).c_str());
+			}
+		}
 	};
 }
