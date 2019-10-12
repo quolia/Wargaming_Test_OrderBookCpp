@@ -56,47 +56,7 @@ namespace WG_ORDERBOOK
 				throw exception("File is not opened.");
 			}
 
-			if (_stream.eof())
-			{
-				return false;
-			}
-			else
-			{
-				if (!(_stream >> record._timestamp))
-				{
-					throw exception("Invalid file format.");
-				}
-
-				char type;
-
-				if (!(_stream >> type) || ('I' != type && 'E' != type))
-				{
-					throw exception("Invalid file format.");
-				}
-
-				record._is_insert = 'I' == type;
-
-				if (!(_stream >> record._id))
-				{
-					throw exception("Invalid file format.");
-				}
-
-				if (record._is_insert)
-				{
-					if (!(_stream >> record._price))
-					{
-						throw exception("Invalid file format.");
-					}
-				}
-				else
-				{
-					record._price = 0;
-				}
-
-				record.validate();
-
-				return true;
-			}
+			return _stream.eof() ? false : !!(_stream >> record);
 		}
 
 		/// <summary> Checks if file is opened. </summary>

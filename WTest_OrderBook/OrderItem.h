@@ -58,6 +58,43 @@ namespace WG_ORDERBOOK
 				throw exception("Invalid order data.");
 			}
 		}
+
+		friend istream& operator>>(istream& stream, order_record& record)
+		{
+			if (!(stream >> record._timestamp))
+			{
+				throw exception("Invalid file format.");
+			}
+
+			char type;
+
+			if (!(stream >> type) || ('I' != type && 'E' != type))
+			{
+				throw exception("Invalid file format.");
+			}
+
+			record._is_insert = 'I' == type;
+
+			if (!(stream >> record._id))
+			{
+				throw exception("Invalid file format.");
+			}
+
+			if (record._is_insert)
+			{
+				if (!(stream >> record._price))
+				{
+					throw exception("Invalid file format.");
+				}
+			}
+			else
+			{
+				record._price = 0;
+			}
+
+			record.validate();
+			return stream;
+		}
 	};
 
 	/// <summary> Order item class. </summary>
