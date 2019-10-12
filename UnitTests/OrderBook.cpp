@@ -25,7 +25,7 @@ namespace UnitTests
 			order_book book;
 			book.add(order);
 			Assert::IsTrue(book.size() == 1, L"Order book is empty.");
-			book.remove(order.id(), 1);
+			book.remove(order.id());
 			Assert::IsTrue(book.size() == 0, L"Order book is not empty.");
 		}
 
@@ -34,7 +34,7 @@ namespace UnitTests
 			try
 			{
 				order_book book;
-				book.remove(1, 1);
+				book.remove(1);
 				Assert::Fail(L"Exception missing.");
 			}
 			catch (const exception&)
@@ -50,7 +50,7 @@ namespace UnitTests
 				order_item order(1, 1, 1);
 				order_book book;
 				book.add(order);
-				book.remove(2, 1);
+				book.remove(2);
 				Assert::Fail(L"Exception missing.");
 			}
 			catch (const exception&)

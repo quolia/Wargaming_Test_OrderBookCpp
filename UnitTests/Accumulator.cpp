@@ -230,13 +230,95 @@ namespace UnitTests
 				acc.remove_order(o1.id(), 3000);
 				acc.remove_order(o2.id(), 4000);
 			}
-			catch (const exception& e)
+			catch (const exception & e)
 			{
 				string str = e.what();
 				Assert::Fail(utils::widen(str).c_str());
 			}
 
 			Assert::IsTrue(acc.average_highest_price() == 50000 / (double)3000);
+		}
+
+		TEST_METHOD(Test_Accumulator_add_n_orders)
+		{
+			accumulator acc;
+			try
+			{
+				shared_ptr<order_book_iface> ptr(new order_book());
+				acc.init(ptr);
+
+				for (int i = 1; i <= 10; ++i)
+				{
+					order_item o(i, 1000 * i, 10);
+					acc.add_order(o);
+				}
+
+				for (int i = 1; i <= 10; ++i)
+				{
+					acc.remove_order(i, 10000 + i * 1000);
+				}
+			}
+			catch (const exception & e)
+			{
+				string str = e.what();
+				Assert::Fail(utils::widen(str).c_str());
+			}
+
+			Assert::IsTrue(acc.average_highest_price() == 10);
+		}
+
+		TEST_METHOD(Test_Accumulator_add_n_orders2)
+		{
+			accumulator acc;
+			try
+			{
+				shared_ptr<order_book_iface> ptr(new order_book());
+				acc.init(ptr);
+
+				for (int i = 1; i <= 10; ++i)
+				{
+					order_item o(i, 1000 * i, 10);
+					acc.add_order(o);
+				}
+
+				for (int i = 1; i <= 10; ++i)
+				{
+					acc.remove_order(i, 10000);
+				}
+			}
+			catch (const exception & e)
+			{
+				string str = e.what();
+				Assert::Fail(utils::widen(str).c_str());
+			}
+
+			Assert::IsTrue(acc.average_highest_price() == 10);
+		}
+
+		TEST_METHOD(Test_Accumulator_add_n_orders3)
+		{
+			accumulator acc;
+			try
+			{
+				shared_ptr<order_book_iface> ptr(new order_book());
+				acc.init(ptr);
+
+				order_item o1(1, 1000, 10);
+				order_item o2(2, 1000, 20);
+
+				acc.add_order(o1);
+				acc.add_order(o2);
+
+				acc.remove_order(o1.id(), 2000);
+				acc.remove_order(o2.id(), 2000);
+			}
+			catch (const exception & e)
+			{
+				string str = e.what();
+				Assert::Fail(utils::widen(str).c_str());
+			}
+
+			Assert::IsTrue(acc.average_highest_price() == 20);
 		}
 
 		TEST_METHOD(Test_Accumulator_result_gap)

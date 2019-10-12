@@ -18,12 +18,12 @@ namespace WG_ORDERBOOK
 
 		/// <summary> Adds order. </summary>
 		/// <param name="order"> Order to add. </param>
-		virtual void add(order_item& order) = 0; 
+		virtual void add(const order_item& order) = 0; 
 
 		/// <summary> Removes order. </summary>
 		/// <param name="id"> Previously added order id. </param>
 		/// <param name="timestamp"> Current timestamp. </param>
-		virtual void remove(unsigned id, timestamp_type timestamp) = 0;
+		virtual void remove(unsigned id) = 0;
 
 		/// <summary> Returns top-price order. </summary>
 		virtual const order_item& max_price_order() = 0;
@@ -43,13 +43,13 @@ namespace WG_ORDERBOOK
 		typedef unordered_map<unsigned, order_data> orders_map_type;
 		typedef pair<unsigned, order_data> orders_map_pair_type;
 		
-		orders_container_type _orders; /// <summary> Container of orders. </summary>
+		orders_container_type _orders;	/// <summary> Container of orders. </summary>
+		orders_map_type _orders_map;	/// <summary> Supporting 'map' to store 'set' iterator for fast deleting from 'set'. </summary>
+		order_item _null_order;			/// <summary> Default order to return is order book is empty. </summary>
 
-		orders_map_type _orders_map; /// <summary> Supporting 'map' to store 'set' iterator for fast deleting from 'set'. </summary>
-
-		order_item _null_order; /// <summary> Default order to return is order book is empty. </summary>
-
+#ifdef MT
 		mutex _lock; /// <summary> Operations mutex. </summary>
+#endif
 
 	public:
 
@@ -61,10 +61,11 @@ namespace WG_ORDERBOOK
 
 		/// <summary> Adds order. </summary>
 		/// <param name="order"> Order to add. O(log(n)). </param>
-		virtual void add(order_item& order)
+		virtual void add(const order_item& order)
 		{
+#ifdef MT
 			lock_guard<mutex> lock(_lock);
-
+#endif
 			// Insert order to the 'set'. It will be automatically inserted to a sort-keep position.
 			auto result = _orders.insert(order); // O(log(n))
 			if (!result.second)
@@ -83,11 +84,11 @@ namespace WG_ORDERBOOK
 
 		/// <summary> Removes order. O(log(n)). </summary>
 		/// <param name="id"> Previously added order id. </param>
-		/// <param name="timestamp"> Current timestamp. </param>
-		virtual void remove(unsigned id, timestamp_type timestamp)
+		virtual void remove(unsigned id)
 		{
+#ifdef MT
 			lock_guard<mutex> lock(_lock);
-
+#endif
 			if (0 == id)
 			{
 				throw exception("Invalid order id.");
@@ -104,8 +105,9 @@ namespace WG_ORDERBOOK
 		/// <summary> Returns top-price order. The top-price order is located at the end of 'set'. </summary>
 		virtual const order_item& max_price_order() noexcept
 		{
+#ifdef MT
 			lock_guard<mutex> lock(_lock);
-
+#endif
 			auto it = _orders.rbegin();
 			return it == _orders.rend() ? _null_order : *it;
 		}
@@ -113,8 +115,9 @@ namespace WG_ORDERBOOK
 		/// <summary> Returns amount of orders in the book. </summary>
 		virtual size_t size() noexcept
 		{
+#ifdef MT
 			lock_guard<mutex> lock(_lock);
-
+#endif
 			return _orders_map.size();
 		}
 	};

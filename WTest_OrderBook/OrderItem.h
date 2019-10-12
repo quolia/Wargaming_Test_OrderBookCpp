@@ -105,25 +105,26 @@ namespace WG_ORDERBOOK
 			_price = data._price;
 		}
 
-		order_data& data() const noexcept
+		/// <summary> Returns data order of order without id. </summary>
+		inline order_data& data() const noexcept
 		{
 			return *(order_data*)this;
 		}
 
 		/// <summary> Returns order id. </summary>
-		unsigned id() const noexcept
+		inline unsigned id() const noexcept
 		{
 			return _id;
 		}
 
 		/// <summary> Returns order price. </summary>
-		double price() const noexcept
+		inline double price() const noexcept
 		{
 			return _price;
 		}
 
 		/// <summary> Returns order timestamp. </summary>
-		timestamp_type timestamp() const noexcept
+		inline timestamp_type timestamp() const noexcept
 		{
 			return _timestamp;
 		}

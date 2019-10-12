@@ -15,13 +15,10 @@ namespace WG_ORDERBOOK
 	/// <summary> Application class. </summary>
 	class application
 	{
-		volatile bool _is_inited; /// <summary> The flag is true if the application instance has been inited successfully. </summary>
-
-		orders_file _src_file; /// <summary> File to read. </summary>
-
-		shared_ptr<order_book_iface> _order_book; /// <summary> Pointer to order book interface. </summary>
-
-		accumulator _accumulator; /// <summary> Orders time-weight accumulator. </summary>
+		volatile bool _is_inited;					/// <summary> The flag is true if the application instance has been inited successfully. </summary>
+		orders_file _src_file;						/// <summary> File to read. </summary>
+		shared_ptr<order_book_iface> _order_book;	/// <summary> Pointer to order book interface. </summary>
+		accumulator _accumulator;					/// <summary> Orders time-weight accumulator. </summary>
 	
 	public:
 
@@ -58,18 +55,16 @@ namespace WG_ORDERBOOK
 				throw exception("Application has not been inited yet.");
 			}
 
-			order_record order_record;
-
-			while (_src_file.read_order_record(order_record))
+			order_record record;
+			while (_src_file.read_order_record(record))
 			{
-				if (order_record._is_insert)
+				if (record._is_insert)
 				{
-					order_item order = order_record;
-					_accumulator.add_order(order);
+					_accumulator.add_order(record);
 				}
 				else
 				{
-					_accumulator.remove_order(order_record._id, order_record._timestamp);
+					_accumulator.remove_order(record._id, record._timestamp);
 				}
 			}
 		}
