@@ -11,7 +11,7 @@ namespace WG_ORDERBOOK
 {
 	using namespace std;
 
-	/// <summary> Simple wrapper for a file. </summary>
+	/// <summary> Simple wrapper for a file of orders. </summary>
 	class orders_file
 	{
 		ifstream _stream; /// <summary> Stream to read. </summary>

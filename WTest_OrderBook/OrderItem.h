@@ -9,10 +9,14 @@ namespace WG_ORDERBOOK
 	using namespace std;
 
 	/// <summary> Order data. </summary>
-	struct order_data
+	class order_data
 	{
+	protected:
+
 		timestamp_type _timestamp;	/// <summary> Order timestamp. </summary>
 		double _price;				/// <summary> Order price (valid for insert operation). </summary>
+
+	public:
 
 		/// <summary> Default ctor. </summary>
 		order_data() noexcept
@@ -20,19 +24,47 @@ namespace WG_ORDERBOOK
 		{
 			//
 		}
+
+		/// <summary> Returns order timestamp. </summary>
+		timestamp_type timestamp() const noexcept
+		{
+			return _timestamp;
+		}
+
+		/// <summary> Returns order price. </summary>
+		double price() const noexcept
+		{
+			return _price;
+		}
 	};
 
 	/// <summary> Order record in source file. </summary>
-	struct order_record : public order_data
+	class order_record : public order_data
 	{
+	protected:
+
 		unsigned _id;				/// <summary> Order id. </summary>
 		bool _is_insert;			/// <summary> Is insert operation. </summary>
+
+	public:
 
 		/// <summary> Default ctor. </summary>
 		order_record() noexcept
 			: _id(0), _is_insert(false)
 		{
 			//
+		}
+
+		/// <summary> Returns order id. </summary>
+		unsigned id() const noexcept
+		{
+			return _id;
+		}
+
+		/// <summary> Returns true if insert operation. </summary>
+		bool is_insert() const noexcept
+		{
+			return _is_insert;
 		}
 
 		/// <summary> Validates order record data. </summary>
@@ -127,10 +159,10 @@ namespace WG_ORDERBOOK
 		/// <summary> Copy ctor to copy from order record. </summary>
 		/// <param name="record"> Record to make order copy from. </param>
 		order_item(const order_record& record) noexcept
-			: _id(record._id)
+			: _id(record.id())
 		{
-			_timestamp = record._timestamp;
-			_price = record._price;
+			_timestamp = record.timestamp();
+			_price = record.price();
 		}
 
 		/// <summary> Data ctor to copy from order data. </summary>
@@ -138,30 +170,30 @@ namespace WG_ORDERBOOK
 		order_item(unsigned id, const order_data& data) noexcept
 			: _id(id)
 		{
-			_timestamp = data._timestamp;
-			_price = data._price;
+			_timestamp = data.timestamp();
+			_price = data.price();
 		}
 
-		/// <summary> Returns data order of order without id. </summary>
-		inline order_data& data() const noexcept
+		/// <summary> Returns order's data without id. </summary>
+		order_data& data() const noexcept
 		{
 			return *(order_data*)this;
 		}
 
 		/// <summary> Returns order id. </summary>
-		inline unsigned id() const noexcept
+		unsigned id() const noexcept
 		{
 			return _id;
 		}
 
 		/// <summary> Returns order price. </summary>
-		inline double price() const noexcept
+		double price() const noexcept
 		{
 			return _price;
 		}
 
 		/// <summary> Returns order timestamp. </summary>
-		inline timestamp_type timestamp() const noexcept
+		timestamp_type timestamp() const noexcept
 		{
 			return _timestamp;
 		}
