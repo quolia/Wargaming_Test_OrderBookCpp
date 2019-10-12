@@ -2,7 +2,9 @@
 #ifndef _WTEST_ACCUM_H
 #define _WTEST_ACCUM_H
 
+#ifdef MT
 #include <mutex>
+#endif
 #include "OrderBook.h"
 
 namespace WG_ORDERBOOK

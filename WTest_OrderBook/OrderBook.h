@@ -4,7 +4,9 @@
 
 #include <set>
 #include <unordered_map>
+#ifdef MT
 #include <mutex>
+#endif
 #include "OrderItem.h"
 
 namespace WG_ORDERBOOK
