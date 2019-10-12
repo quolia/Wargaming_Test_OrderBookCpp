@@ -19,8 +19,6 @@ namespace WG_ORDERBOOK
 		unsigned long long _accumulator_time; /// <summary> Accumulated value of time. </summary>
 		
 		timestamp_type _last_timestamp; /// <summary> Last time maximum price was changed. </summary>
-
-		timestamp_type _first_timestamp; /// <summary> First order timestamp (after start or time gap). </summary>
 		
 		mutex _lock; /// <summary> Operations mutex. </summary>
 
@@ -49,17 +47,12 @@ namespace WG_ORDERBOOK
 			_accumulator_price = 0;
 			_accumulator_time = 0;
 			_last_timestamp = invalid_timestamp;
-			_first_timestamp = invalid_timestamp;
 		}
 
 		/// <summary> Adds order to accumulator. </summary>
 		/// <param name="order"> Order to add. </param>
 		void add_order(order_item& order)
 		{
-			// WARNING:
-			// We could validate time consistentcy (straight time line), but in case of multi-threading or
-			// multiple orders providers the time line could be inconsistent.
-
 			lock_guard<mutex> lock(_lock);
 
 			if (!_order_book)
@@ -75,7 +68,9 @@ namespace WG_ORDERBOOK
 			{
 				if (current_max_price > 0)
 				{
-					_accumulator_price += current_max_price * (order.timestamp() - _last_timestamp);
+					auto time = order.timestamp() - _last_timestamp;
+					_accumulator_price += current_max_price * time;
+					_accumulator_time += time;
 				}
 
 				// Update last timestamp of top-price order changing.
@@ -83,13 +78,6 @@ namespace WG_ORDERBOOK
 			}
 
 			_order_book->add(order);
-
-			// If this is first order than remember it's timestamp to calculate duration at the end.
-
-			if (invalid_timestamp == _first_timestamp)
-			{
-				_first_timestamp = order.timestamp();
-			}
 		}
 
 		/// <summary> Removes order from accumulator. </summary>
@@ -110,18 +98,14 @@ namespace WG_ORDERBOOK
 			if (max_price_order.id() == id)
 			{
 				// Accumulate top-price order time and update time of top-price order changing.
-				_accumulator_price += max_price_order.price() * (timestamp - _last_timestamp);
+				auto time = timestamp - _last_timestamp;
+				_accumulator_price += max_price_order.price() * time;
+				_accumulator_time += time;
 				_last_timestamp = timestamp;
 			}
 
 			// Remove the order from the book.
 			_order_book->remove(id, timestamp);
-
-			if (0 == _order_book->size())
-			{
-				_accumulator_time += (timestamp - _first_timestamp);
-				_first_timestamp = invalid_timestamp;
-			}
 		}
 
 		/// <summary> Returns time-weighted average highest price of orders. </summary>

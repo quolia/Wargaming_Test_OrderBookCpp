@@ -144,9 +144,9 @@ namespace UnitTests
 				acc.init(ptr);
 
 				order_item o1(1, 1000, 10);
-				order_item o2(2, 2000, 20);
-
 				acc.add_order(o1);
+
+				order_item o2(2, 2000, 20);
 				acc.add_order(o2);
 
 				acc.remove_order(o2.id(), 3000);
