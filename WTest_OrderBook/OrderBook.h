@@ -41,7 +41,7 @@ namespace WG_ORDERBOOK
 		// Types aliases.
 		typedef set<order_item, order_comparer> orders_container_type;
 		typedef unordered_map<unsigned, order_data> orders_map_type;
-		typedef pair<unsigned, order_data> orders_map_item_type;
+		typedef pair<unsigned, order_data> orders_map_pair_type;
 		
 		orders_container_type _orders; /// <summary> Container of orders. </summary>
 
@@ -60,8 +60,8 @@ namespace WG_ORDERBOOK
 		}
 
 		/// <summary> Adds order. </summary>
-		/// <param name="order"> Order to add. </param>
-		virtual void add(order_item& order) // O(log(n))
+		/// <param name="order"> Order to add. O(log(n)). </param>
+		virtual void add(order_item& order)
 		{
 			lock_guard<mutex> lock(_lock);
 
@@ -73,24 +73,20 @@ namespace WG_ORDERBOOK
 			}
 
 			// Insert order to 'map'.
-			auto map_result = _orders_map.insert(orders_map_item_type(order.id(), order.data())); // O(1)
+			auto map_result = _orders_map.insert(orders_map_pair_type(order.id(), order.data())); // O(1)
 			if (!map_result.second)
 			{
+				_orders.erase(order);
 				throw exception("Cannot insert order with the given id.");
 			}
 		}
 
-		/// <summary> Removes order. </summary>
+		/// <summary> Removes order. O(log(n)). </summary>
 		/// <param name="id"> Previously added order id. </param>
 		/// <param name="timestamp"> Current timestamp. </param>
-		virtual void remove(unsigned id, timestamp_type timestamp) // O(log(n))
+		virtual void remove(unsigned id, timestamp_type timestamp)
 		{
 			lock_guard<mutex> lock(_lock);
-
-			if (!_orders_map.size())
-			{
-				throw exception("Cannot remove an order from empty book.");
-			}
 
 			if (0 == id)
 			{
