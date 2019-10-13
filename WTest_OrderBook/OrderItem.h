@@ -199,13 +199,17 @@ namespace WG_ORDERBOOK
 		}
 	};
 
-	/// <summary> Comparer to use in set to sort items by price and timestamp (functor). </summary>
+	/// <summary> Comparer to use in set to sort order items. </summary>
 	class order_comparer
 	{
 	public:
+
+		/// <summary> Implements 'less' operation. </summary>
+		/// <param name="l"> Left operand. </param>
+		/// <param name="r"> Right operand. </param>
 		bool operator()(const order_item& l, const order_item& r) const noexcept
 		{
-			// If the prices are equal than compare timestamps and than ids.
+			// If prices are equal than compare timestamps and than ids.
 
 			if (l.price() == r.price())
 			{
