@@ -29,7 +29,7 @@ namespace WG_ORDERBOOK
 		}
 
 		/// <summary> Initiate application instance. </summary>
-		/// <param name="argc"> Amoung of command line parameters. </param>
+		/// <param name="argc"> Amount of command line parameters. </param>
 		/// <param name="argv"> Command line parameters. </param>
 		void init(int argc, char* argv[])
 		{

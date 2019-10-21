@@ -46,8 +46,8 @@ namespace WG_ORDERBOOK
 		typedef pair<unsigned, order_data> orders_map_pair_type;
 		
 		orders_container_type _orders;	/// <summary> Container of orders. </summary>
-		orders_map_type _orders_map;	/// <summary> Supporting 'map' to store 'set' iterator for fast deleting from 'set'. </summary>
-		order_item _null_order;			/// <summary> Default order to return is order book is empty. </summary>
+		orders_map_type _orders_map;	/// <summary> Supporting 'map' to store order id and data. </summary>
+		order_item _null_order;			/// <summary> Default order to return if order book is empty. </summary>
 
 #ifdef MT
 		mutex _lock; /// <summary> Operations mutex. </summary>
