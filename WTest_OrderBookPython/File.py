@@ -1,9 +1,7 @@
+from .OrderItem import *
 
-import OrderItem
-
-	#/// <summary> Simple wrapper for a file of orders. </summary>
-	class orders_file:
-
+class orders_file:
+"""Simple wrapper for a file of orders."""
 		ifstream _stream; #/// <summary> Stream to read. </summary>
 
 	#public:

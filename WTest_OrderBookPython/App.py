@@ -2,6 +2,7 @@ from .CLI import command_line
 from .File import orders_file
 from .OrderBook import order_book_iface, order_book
 from .Accumulator import accumulator
+from .OrderItem import *
 
 class application:
     """Application class."""
@@ -19,7 +20,7 @@ class application:
         cli_params = command_line()
         cli_params.init()
 
-        print("Source file: ") # << cli_params.src_file_name() << endl;
+        print(f'Source file: {cli_params.src_file_name()}')
         self._src_file.open_for_read(cli_params.src_file_name())
 
         self._order_book = order_book()
@@ -29,24 +30,20 @@ class application:
 
     def run(self):
         """Reads source file till the end."""
-        if (!self._is_inited):
-            raise BaseException("Application has not been inited yet.")
+        if not self._is_inited:
+            raise BaseException('Application has not been inited yet.')
 
-        order_record record;
+        record = order_record()
 
-        while (_src_file.read_order_record(record))
-            if (record.is_insert()):
-                _accumulator.add_order(record);
+        while self._src_file.read_order_record(record):
+            if record.is_insert():
+                self._accumulator.add_order(record)
             else:
-                _accumulator.remove_order(record.id(), record.timestamp());
+                self._accumulator.remove_order(record.id(), record.timestamp())
 
-    """
-    // / < summary > Returns    time - weighted    average    highest    price    of    orders. < / summary >
-    // / < returns > Time - weighted    average    highest    price    of    orders. < / returns >
-    """
     def average_highest_price(self):
+    """Returns time-weighted average highest price of orders."""
+        if not self._is_inited:
+            raise BaseException('Application has not been inited yet.')
 
-        if (!self._is_inited):
-            throw exception("Application has not been inited yet.")
-
-        return _accumulator.average_highest_price()
+        return self._accumulator.average_highest_price()
