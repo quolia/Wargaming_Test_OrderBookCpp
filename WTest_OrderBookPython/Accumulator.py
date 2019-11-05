@@ -1,133 +1,71 @@
-#pragma once
-#ifndef _WTEST_ACCUM_H
-#define _WTEST_ACCUM_H
+from .OrderBook import order_book_iface
+from .Types import *
 
-#ifdef MT
-#include <mutex>
-#endif
-#include "OrderBook.h"
+class accumulator:
+    """Orders time and price accumulator."""
+    def __init__(self):
+        self._order_book = None	            #/// <summary> Pointer to underlying order book container. </summary>
+        self._accumulator_price = float(0)	#/// <summary> Accumulated value of prices. </summary>
+        self._accumulator_time = int(0)		#/// <summary> Accumulated value of time. </summary>
+        self._last_timestamp = int(0)		#/// <summary> Last time maximum price was changed. </summary>
+        self.reset()
 
-namespace WG_ORDERBOOK
-{
-	using namespace std;
+    #	/// <param name="order_book"> Order book interface. </param>
+    def init(self, order_book):
+        """Init accumulator."""
+        self._order_book = order_book
 
-	/// <summary> Orders time and price accumulator. </summary>
-	class accumulator
-	{
-		shared_ptr<order_book_iface> _order_book;	/// <summary> Pointer to underlying order book container. </summary>
-		double _accumulator_price;					/// <summary> Accumulated value of prices. </summary>
-		unsigned long long _accumulator_time;		/// <summary> Accumulated value of time. </summary>
-		timestamp_type _last_timestamp;				/// <summary> Last time maximum price was changed. </summary>
+        #/// <summary> Reset accumulator state. </summary>
+    def reset(self):
+        self._order_book.reset()
+        self._accumulator_price = 0
+        self._accumulator_time = 0
+        self._last_timestamp = invalid_timestamp
 
-#ifdef MT
-		mutex _lock; /// <summary> Operations mutex. </summary>
-#endif
+        #/// <param name="order"> Order to add. </param>
+    def add_order(self, order):
+        """"Adds order to accumulator."""
+        if self._order_book is None:
+            raise Exception('Accumulator not inited.')
 
-	public:
+        # Check if new order is top-price order and accumulate previous top-price order time.
 
-		/// <summary> Default ctor. </summary>
-		accumulator() noexcept
-		{
-			reset();
-		}
+        current_max_price = self._order_book.max_price_order().price()
 
-		/// <summary> Init accumulator. </summary>
-		/// <param name="order_book"> Order book interface. </param>
-		void init(shared_ptr<order_book_iface>& order_book) noexcept
-		{
-			_order_book = order_book;
-		}
+        if order.price() > current_max_price:
+            if current_max_price > 0:
+                time = order.timestamp() - self._last_timestamp
+                self._accumulator_price += current_max_price * time
+                self._accumulator_time += time
 
-		/// <summary> Reset accumulator state. </summary>
-		void reset() noexcept
-		{
-#ifdef MT
-			lock_guard<mutex> lock(_lock);
-#endif
-			_order_book.reset();
+            # Update last timestamp of top-price order changing.
+            self._last_timestamp = order.timestamp()
 
-			_accumulator_price = 0;
-			_accumulator_time = 0;
-			_last_timestamp = invalid_timestamp;
-		}
 
-		/// <summary> Adds order to accumulator. </summary>
-		/// <param name="order"> Order to add. </param>
-		void add_order(const order_item& order)
-		{
-#ifdef MT
-			lock_guard<mutex> lock(_lock);
-#endif
-			if (!_order_book)
-			{
-				throw exception("Accumulator not inited.");
-			}
+        self._order_book.add(order)
 
-			// Check if new order is top-price order and accumulate previous top-price order time.
+    #/// <param name="id"> Previously added order id. </param>
+    #/// <param name="timestamp"> Current timestamp. </param>
+    def remove_order(self, id, timestamp):
+        """Removes order from accumulator."""
+        if self._order_book is None:
+            raise Exception('Accumulator not inited.')
 
-			double current_max_price = _order_book->max_price_order().price();
+        # Check if the order being removed is the top-price order.
+        max_price_order = self._order_book.max_price_order()
+        if max_price_order.id() == id:
+            if timestamp < self._last_timestamp:
+                raise Exception('Time line inconsistent.')
+            elif timestamp != self._last_timestamp: # If not removed at the same time.
+                # Accumulate top-price order time and update time of top-price order changing.
+                time = timestamp - self._last_timestamp
+                self._accumulator_price += max_price_order.price() * time
+                self._accumulator_time += time
+                self._last_timestamp = timestamp
 
-			if (order.price() > current_max_price)
-			{
-				if (current_max_price > 0)
-				{
-					auto time = order.timestamp() - _last_timestamp;
-					_accumulator_price += current_max_price * time;
-					_accumulator_time += time;
-				}
+        # Remove the order from the book.
+        self._order_book.remove(id)
 
-				// Update last timestamp of top-price order changing.
-				_last_timestamp = order.timestamp();
-			}
-
-			_order_book->add(order);
-		}
-
-		/// <summary> Removes order from accumulator. </summary>
-		/// <param name="id"> Previously added order id. </param>
-		/// <param name="timestamp"> Current timestamp. </param>
-		void remove_order(unsigned id, timestamp_type timestamp)
-		{
-#ifdef MT
-			lock_guard<mutex> lock(_lock);
-#endif
-			if (!_order_book)
-			{
-				throw exception("Accumulator not inited.");
-			}
-
-			// Check if the order being removed is the top-price order.
-			const order_item& max_price_order = _order_book->max_price_order();
-			if (max_price_order.id() == id)
-			{
-				if (timestamp < _last_timestamp)
-				{
-					throw exception("Time line inconsistent.");
-				}
-				else if (timestamp != _last_timestamp) // If not removed at the same time.
-				{
-					// Accumulate top-price order time and update time of top-price order changing.
-					auto time = timestamp - _last_timestamp;
-					_accumulator_price += max_price_order.price() * time;
-					_accumulator_time += time;
-					_last_timestamp = timestamp;
-				}
-			}
-
-			// Remove the order from the book.
-			_order_book->remove(id);
-		}
-
-		/// <summary> Returns time-weighted average highest price of orders. </summary>
-		/// <returns> Time-weighted average highest price of orders. </returns>
-		double average_highest_price() noexcept
-		{
-#ifdef MT
-			lock_guard<mutex> lock(_lock);
-#endif
-			return 0 == _accumulator_time ? 0 : _accumulator_price / _accumulator_time;
-		}
-	};
-}
-
-#endif // _WTEST_ACCUM_H
+    def average_highest_price(self):
+        """Returns time-weighted average highest price of orders."""
+        return 0 if 0 == self._accumulator_time else self._accumulator_price / self._accumulator_time

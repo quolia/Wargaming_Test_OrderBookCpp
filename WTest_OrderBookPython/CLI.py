@@ -15,6 +15,6 @@ class command_line:
         argv = sys.argv[1:]
         argc = len(argv)
         if argc < 1:
-            raise BaseException('Invalid parameters count. Example parameters: srcfile')
+            raise Exception('Invalid parameters count. Example parameters: srcfile')
 
         __src_file_name = argv[0]

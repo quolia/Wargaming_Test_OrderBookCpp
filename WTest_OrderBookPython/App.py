@@ -31,7 +31,7 @@ class application:
     def run(self):
         """Reads source file till the end."""
         if not self._is_inited:
-            raise BaseException('Application has not been inited yet.')
+            raise Exception('Application has not been inited yet.')
 
         record = order_record()
 
@@ -42,8 +42,8 @@ class application:
                 self._accumulator.remove_order(record.id(), record.timestamp())
 
     def average_highest_price(self):
-    """Returns time-weighted average highest price of orders."""
+        """Returns time-weighted average highest price of orders."""
         if not self._is_inited:
-            raise BaseException('Application has not been inited yet.')
+            raise Exception('Application has not been inited yet.')
 
         return self._accumulator.average_highest_price()

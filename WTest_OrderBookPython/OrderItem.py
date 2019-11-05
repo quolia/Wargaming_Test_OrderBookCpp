@@ -1,131 +1,48 @@
-
-import Types
-
-#// / < summary > Order data. < / summary >
-
+from .Types import *
 
 class order_data:
-
-    #protected:
-
-    timestamp_type _timestamp; #// / < summary > Order    timestamp. < / summary >
-    double _price; #// / < summary > Order    price(valid for insert operation). < / summary >
-
-    #public:
-
-    #// / < summary > Default    ctor. < / summary >
-
-    def __init_(self):
+    """Order data."""
+    def __init__(self):
+        """Ctor."""
         self._price = 0;
-        self._timestamp = _timestamp;
+        self._timestamp = invalid_timestamp
 
-    // / < summary > Returns
-    order
-    timestamp. < / summary >
-                   timestamp_type
-    timestamp()
-    const
-    noexcept
-    {
-    return _timestamp;
-    }
+    def timestamp(self):
+        """Returns order timestamp."""
+        return self._timestamp
 
-    // / < summary > Returns
-    order
-    price. < / summary >
-               double
-    price()
-    const
-    noexcept
-    {
-    return _price;
+    def price(self):
+        """Returns order price."""
+        return self._price
 
-}
-};
+class order_record(order_data):
+    """Order record in source file."""
+    def __init__(self):
+        """Ctor."""
+        self._id = 0 #// / < summary > Order id. < / summary >
+        self._is_insert = False #// / < summary > Is insert operation. < / summary >
 
-// / < summary > Order
-record in source
-file. < / summary >
+    def id(self):
+        """Returns order id."""
+        return self._id
 
+    def is_insert(self):
+        """Returns true if insert operation."""
+        return self._is_insert
 
-class order_record: public
+    def validate(self):
+        """Validates order record data."""
+        if self._id < 1:
+            raise Exception('Invalid order id.')
 
+        if invalid_timestamp == self._timestamp:
+            raise Exception('Invalid order timestamp.')
 
-order_data
-{
-    protected:
+        if self._is_insert and self._price < 0:
+            raise Exception('Invalid order price.')
 
-        unsigned _id; // / < summary > Order
-id. < / summary >
-        bool
-_is_insert; // / < summary > Is
-insert
-operation. < / summary >
-
-               public:
-
-// / < summary > Default
-ctor. < / summary >
-          order_record()
-noexcept
-: _id(0), _is_insert(false)
-{
-//
-}
-
-// / < summary > Returns
-order
-id. < / summary >
-        unsigned
-id()
-const
-noexcept
-{
-return _id;
-}
-
-// / < summary > Returns
-true if insert
-operation. < / summary >
-               bool
-is_insert()
-const
-noexcept
-{
-return _is_insert;
-}
-
-// / < summary > Validates
-order
-record
-data. < / summary >
-          void
-validate()
-{
-if (_id < 1)
-    {
-        throw
-    exception("Invalid order id.");
-    }
-
-    if (invalid_timestamp == _timestamp)
-        {
-            throw
-        exception("Invalid order timestamp.");
-        }
-
-        if (_is_insert & & _price < 0)
-            {
-                throw
-            exception("Invalid order price.");
-            }
-
-            if (!_is_insert & & _price != 0)
-                {
-                    throw
-                exception("Invalid order data.");
-                }
-                }
+        if not self._is_insert and self._price != 0:
+            raise Exception('Invalid order data.')
 
                 friend
                 istream & operator >> (istream & stream, order_record & record)

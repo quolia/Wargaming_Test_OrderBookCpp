@@ -1,41 +1,37 @@
 from .OrderItem import *
 
 class orders_file:
-"""Simple wrapper for a file of orders."""
-		ifstream _stream; #/// <summary> Stream to read. </summary>
+    """Simple wrapper for a file of orders."""
+    def __init__(self):
+        self._f = None # Stream to read.
 
-	#public:
+    def __del__(self):
+        """Dtor."""
+        self.close()
 
-		#/// <summary> Dtor. </summary>
-		def ~orders_file()
-			close()
+    def close(self):
+        """Closes file if opened."""
+        if self.is_opened():
+            self._f.close()
+            self._f = None
 
-		#/// <summary> Close file if opened. </summary>
-		def close():
-			if (is_opened()):
-				_stream.close()
+    def open_for_read(self, file_name): # File name to open.
+        """Opens file for read."""
+        self.close()
+        self._f = open(file_name, 'r')
+        if not self.is_opened():
+            raise Exception("Cannot open file.")
 
-		#/// <summary> Opens file for read. </summary>
-		#/// <param name="file_name"> File name to open. </param>
-		def open_for_read(file_name):
+    #/// <param name="record"> Reference to a record to write data in. </param>
+    #/// <returns> Returns false if end of file reached, true otherwise. </returns>
+    def read_order_record(self, order_record record):
+        """Reads and validates orders records."""
+        if not self.is_opened():
+            raise Exception('File is not opened.')
 
-			close()
+        return _stream.eof() ? false : !!(_stream >> record)
 
-			_stream.open(file_name)
-			if (!is_opened()):
-				throw exception("Cannot open file.")
-
-		#/// <summary> Reads and validates orders records. </summary>
-		#/// <param name="record"> Reference to a record to write data in. </param>
-		#/// <returns> Returns false if end of file reached, true otherwise. </returns>
-		def read_order_record(order_record& record):
-
-			if (!is_opened()):
-				throw exception("File is not opened.")
-
-			return _stream.eof() ? false : !!(_stream >> record)
-
-		#/// <summary> Checks if file is opened. </summary>
-		#/// <returns> Returns true if the file is in opened state. </returns>
-		def is_opened():
-			return _stream.is_open()
+    #/// <summary> Checks if file is opened. </summary>
+    #/// <returns> Returns true if the file is in opened state. </returns>
+    def is_opened(self):
+        return self._f
