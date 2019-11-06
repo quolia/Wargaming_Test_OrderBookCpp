@@ -4,7 +4,7 @@ class order_data:
     """Order data."""
     def __init__(self):
         """Ctor."""
-        self._price = 0;
+        self._price = 0
         self._timestamp = invalid_timestamp
 
     def timestamp(self):
@@ -44,253 +44,83 @@ class order_record(order_data):
         if not self._is_insert and self._price != 0:
             raise Exception('Invalid order data.')
 
-                friend
-                istream & operator >> (istream & stream, order_record & record)
-                {
-                if (!(stream >> record._timestamp))
-                {
-                    throw
-                exception("Invalid file format.");
-                }
+    def init(self, string):
+        """
+        1000 I 100 10.0
+        2000 I 101 13.0
+        2200 I 102 13.0
+        2400 E 101
+        2500 E 102
+        4000 E 100
+        :param string: String to init the record.
+        """
+        parts = string.split(' ')
+        self._timestamp = int(parts[0])
+        t = parts[1]
+        self._is_insert = 'I' == t
+        self._id = parts[2]
+        self._price = 0 if not self._is_insert else float(parts[3])
 
-                char
-                type;
+class order_item(order_data):
+    """Order item class."""
+    def __init__(self):
+        """Ctor."""
+        self._id = 0 #// / < summary > Order id. < / summary >
 
-                if (!(stream >> type) | | ('I' != type & & 'E' != type))
-                {
-                    throw
-                exception("Invalid file format.");
-                }
+    #// / < summary > Data  ctor. < / summary >
+    #// / < param name = "id" > Order id. < / param >
+    #// / < param  name = "timestamp" > Order   timestamp. < / param >
+    #// / < param name = "price" > Order price. < / param >
+    def __init__(self, id, timestamp, price):
+        self._id = id
+        self._timestamp = timestamp
+        self._price = price
 
-                record._is_insert = 'I' == type;
-
-                if (!(stream >> record._id))
-                {
-                    throw
-                exception("Invalid file format.");
-                }
-
-                if (record._is_insert)
-                    {
-                    if (!(stream >> record._price))
-                    {
-                        throw
-                    exception("Invalid file format.");
-                    }
-                    }
-                    else
-                    {
-                        record._price = 0;
-                    }
-
-                    record.validate();
-                    return stream;
-                    }
-                    };
-
-                    // / < summary > Order
-                    item
+    # // / < summary > Copy ctor to copy from order record.< / summary >
+    #// / < param name = "record" > Record to make order copy from . < / param >
+    def __init__(self, record):
+        self._id = record.id()
+        self._timestamp = record.timestamp()
+        self._price = record.price()
 
 
-                    class . < / summary >
+    #// / < summary > Data ctor to copy from order data.< / summary >
+    #// / < param name = "data" > Data to make order copy from . < / param >
+    def __init__(self, id, data):
+        self._id = id
+        self._timestamp = data.timestamp()
+        self._price = data.price()
 
 
-                    class order_item: protected
+    #// / < summary > Returns order's data without id. </summary>
+    def data(self):
+        return super
 
+    #// / < summary > Returns order id. < / summary >
+    def id(self):
+        return self._id
 
-                    order_data
-                    {
-                        protected:
+    #// / < summary > Returns order price. < / summary >
+    def price(self):
+        return self._price
 
-                            unsigned _id; // / < summary > Order
-                    id. < / summary >
+    #// / < summary > Returns order timestamp. < / summary >
+    def timestamp(self):
+        return self._timestamp
 
-                            public:
+    def __lt__(self, other):
+        # // / < summary > Implements 'less' operation. < / summary >
+        # // / < param name = "l" > Left operand. < / param >
+        # // / < param name = "r" > Right operand. < / param >
+        # // If prices are equal than compare timestamps and than ids.
 
-                    // / < summary > Default
-                    ctor. < / summary >
-                              order_item()
-                    noexcept
-                    : _id(0)
-                    {
-                    //
-                    }
-
-                    // / < summary > Data
-                    ctor. < / summary >
-                    // / < param
-                    name = "id" > Order
-                    id. < / param >
-                    // / < param
-                    name = "timestamp" > Order
-                    timestamp. < / param >
-                    // / < param
-                    name = "price" > Order
-                    price. < / param >
-                               order_item(unsigned
-                    id, timestamp_type
-                    timestamp, double
-                    price) noexcept
-                    : _id(id)
-                    {
-                        _timestamp = timestamp;
-                    _price = price;
-                    }
-
-                    // / < summary > Copy
-                    ctor
-                    to
-                    copy
-                    from order record.< / summary >
-                    // / < param
-                    name = "record" > Record
-                    to
-                    make
-                    order
-                    copy
-                    from . < / param >
-                               order_item(const
-                    order_record & record) noexcept
-                    : _id(record.id())
-                    {
-                        _timestamp = record.timestamp();
-                    _price = record.price();
-                    }
-
-                    // / < summary > Data
-                    ctor
-                    to
-                    copy
-                    from order data.< / summary >
-                    // / < param
-                    name = "data" > Data
-                    to
-                    make
-                    order
-                    copy
-                    from . < / param >
-                               order_item(unsigned
-                    id, const
-                    order_data & data) noexcept
-                    : _id(id)
-                    {
-                        _timestamp = data.timestamp();
-                    _price = data.price();
-                    }
-
-                    // / < summary > Returns
-                    order
-                    's data without id. </summary>
-                    order_data & data()
-                    const
-                    noexcept
-                    {
-                    return *(order_data *)
-                    this;
-                    }
-
-                    // / < summary > Returns
-                    order
-                    id. < / summary >
-                            unsigned
-                    id()
-                    const
-                    noexcept
-                    {
-                    return _id;
-                    }
-
-                    // / < summary > Returns
-                    order
-                    price. < / summary >
-                               double
-                    price()
-                    const
-                    noexcept
-                    {
-                    return _price;
-                    }
-
-                    // / < summary > Returns
-                    order
-                    timestamp. < / summary >
-                                   timestamp_type
-                    timestamp()
-                    const
-                    noexcept
-                    {
-                    return _timestamp;
-                    }
-                    };
-
-                    // / < summary > Comparer
-                    to
-                    use in set
-                    to
-                    sort
-                    order
-                    items. < / summary >
-
-
-                    class order_comparer
-                        {
-                            public:
-
-                        // / < summary > Implements
-                        'less'
-                        operation. < / summary >
-                        // / < param
-                        name = "l" > Left
-                        operand. < / param >
-                        // / < param
-                        name = "r" > Right
-                        operand. < / param >
-                                     bool
-                        operator()(const
-                        order_item & l, const
-                        order_item & r) const
-                        noexcept
-                        {
-                        // If
-                        prices
-                        are
-                        equal
-                        than
-                        compare
-                        timestamps and than
-                        ids.
-
-                        if (l.price() == r.price())
-                        {
-                        if (l.timestamp() == r.timestamp())
-                        {
-                        if (l.id() == r.id())
-                        {
-
-
-                    return false; // The
-                    same
-                    order is always
-                    not less
-                    than
-                    itself.
-                    }
-                    else
-                    {
-                    return l.id() < r.id();
-                    }
-                    }
-                    else
-                    {
-                    return l.timestamp() < r.timestamp();
-                    }
-                    }
-                    else
-                    {
-                    return l.price() < r.price();
-                    }
-                    }
-                    };
-                    }
-
-                    # endif // _WTEST_ORDERITEM_H
+        if self.price() == other.price():
+            if self.timestamp() == other.timestamp():
+                if self.id() == other.id():
+                    return False # The same order is always not less than itself.
+                else:
+                    return self.id() < other.id()
+            else:
+                return self.timestamp() < other.timestamp()
+        else:
+            return self.price() < other.price()
