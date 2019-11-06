@@ -46,7 +46,7 @@ namespace WG_ORDERBOOK
 			}
 		}
 
-		/// <summary> Reads and validate orders records. </summary>
+		/// <summary> Reads and validates orders records. </summary>
 		/// <param name="record"> Reference to a record to write data in. </param>
 		/// <returns> Returns false if end of file reached, true otherwise. </returns>
 		bool read_order_record(order_record& record)
