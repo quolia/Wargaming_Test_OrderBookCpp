@@ -1,4 +1,4 @@
-from .OrderItem import *
+from OrderItem import *
 
 class orders_file:
     """Simple wrapper for a file of orders."""
@@ -33,7 +33,7 @@ class orders_file:
         line = self._f.readline()
         if not line:
             return False
-        record.init(line)
+        record.from_string(line)
         record.validate()
         return True
 
