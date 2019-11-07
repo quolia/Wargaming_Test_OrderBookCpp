@@ -1,21 +1,23 @@
 import unittest
 #import sys
 #sys.path.append('..')
-from CLI import command_line
+from cli import CommandLine
 
-class CLI_TestCase(unittest.TestCase):
+
+class CLITestCase(unittest.TestCase):
+
     def test_CLI_invalid_count(self):
-        cli = command_line()
+        cli = CommandLine()
         with self.assertRaises(Exception):
             cli.init(['path'])
 
     def test_CLI_invalid_args(self):
-        cli = command_line()
+        cli = CommandLine()
         with self.assertRaises(Exception):
             cli.init(None)
 
     def test_CLI_file_name(self):
-        cli = command_line()
+        cli = CommandLine()
         args = ['path', 'test.txt']
         cli.init(args)
         self.assertEqual(cli.src_file_name(), args[1])

@@ -1,34 +1,36 @@
 import unittest
-from App import application
+from app import Application
 
-class App_TestCase(unittest.TestCase):
+
+class AppTestCase(unittest.TestCase):
+
 	def test_App_invalid_init(self):
-		app = application()
+		app = Application()
 		with self.assertRaises(Exception):
 			app.init(['path'])
 
 	def test_App_invalid_args(self):
-		app = application()
+		app = Application()
 		with self.assertRaises(Exception):
 			app.init(None)
 
 	def test_App_file_not_exists(self):
-		app = application()
+		app = Application()
 		with self.assertRaises(Exception):
 			app.init(['path', 'test.txt'])
 
 	def test_App_file_not_inited(self):
-		app = application()
+		app = Application()
 		with self.assertRaises(Exception):
 			app.run()
 
 	def test_App_file_not_inited2(self):
-		app = application()
+		app = Application()
 		with self.assertRaises(Exception):
 			app.average_highest_price()
 
 	def test_App_App_valid_file(self):
-		app = application()
+		app = Application()
 		app.init(['path', 'TestOrders/valid10.5.txt'])
 		app.run()
 		self.assertTrue(app.average_highest_price() == 10.5, 'Incorrect result.')

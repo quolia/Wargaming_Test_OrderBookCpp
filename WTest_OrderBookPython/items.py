@@ -1,10 +1,10 @@
-from Types import *
+invalid_timestamp = int(-1) # Beware of comparing with 0.
 
-class order_data:
+class OrderData:
     """Order data."""
-    def __init__(self):
-        self._price = int(0)
-        self._timestamp = invalid_timestamp
+
+    _price = int(0)
+    _timestamp = invalid_timestamp
 
     def timestamp(self):
         """Returns order timestamp."""
@@ -14,14 +14,11 @@ class order_data:
         """Returns order price."""
         return self._price
 
-class order_record(order_data):
+class OrderRecord(OrderData):
     """Order record in source file."""
 
     _id = int(0)  # Order id.
     _is_insert = False  # Is insert operation.
-
-    def __init__(self):
-        super().__init__()
 
     def id(self):
         """Returns order id."""
@@ -62,24 +59,21 @@ class order_record(order_data):
         self._id = int(parts[2])
         self._price = 0 if not self._is_insert else float(parts[3])
 
-class order_item(order_data):
+class OrderItem(OrderData):
     """Order item class."""
     _id = int(0)  # Order id.
 
-    def __init__(self):
-        super().__init__()
-
     @classmethod
-    def from_record(cls, record: order_record) -> 'order_item':
-        order = order_item()
+    def from_record(cls, record: OrderRecord) -> 'OrderItem':
+        order = OrderItem()
         order._id = record.id()
         order._timestamp = record.timestamp()
         order._price = record.price()
         return order
 
     @classmethod
-    def from_data(cls, id: int, data: order_data) -> 'order_item':
-        order = order_item()
+    def from_data(cls, id: int, data: OrderData) -> 'OrderItem':
+        order = OrderItem()
         order._id = id
         order._timestamp = data.timestamp()
         order._price = data.price()
@@ -112,8 +106,8 @@ class order_item(order_data):
 
     """
     #// / < summary > Returns order's data without id. </summary>
-    def data(self) -> 'order_data':
-        data = order_data()
+    def data(self) -> 'OrderData':
+        data = OrderData()
         data._timestamp = self.timestamp()
         data._price = self.price()
         return data

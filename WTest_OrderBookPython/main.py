@@ -1,10 +1,10 @@
 import sys, traceback
-from App import application
+from app import Application
 
 
 def main():
     print('Started')
-    app = application()
+    app = Application()
     try:
         app.init(sys.argv)
         app.run()

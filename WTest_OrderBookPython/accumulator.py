@@ -1,30 +1,30 @@
-from OrderBook import order_book_iface
-from OrderItem import *
-from Types import *
+from orderbook import OrderBookIface
+from items import *
 
-class accumulator:
+
+class Accumulator:
     """Orders time and price accumulator."""
     def __init__(self):
-        self._order_book : order_book_iface = None	            #/// <summary> Pointer to underlying order book container. </summary>
+        self._order_book: OrderBookIface = None	            #/// <summary> Pointer to underlying order book container. </summary>
         self._accumulator_price = float(0)	#/// <summary> Accumulated value of prices. </summary>
         self._accumulator_time = int(0)		#/// <summary> Accumulated value of time. </summary>
-        self._last_timestamp = int(0)		#/// <summary> Last time maximum price was changed. </summary>
+        self._last_timestamp = invalid_timestamp		#/// <summary> Last time maximum price was changed. </summary>
         self.reset()
 
     #	/// <param name="order_book"> Order book interface. </param>
-    def init(self, order_book):
+    def init(self, order_book: OrderBookIface):
         """Init accumulator."""
         self._order_book = order_book
 
-    #/// <summary> Reset accumulator state. </summary>
+    #/// <summary> Resets accumulator state. </summary>
     def reset(self):
         self._order_book = None
-        self._accumulator_price = 0
-        self._accumulator_time = 0
+        self._accumulator_price = float(0)
+        self._accumulator_time = int(0)
         self._last_timestamp = invalid_timestamp
 
         #/// <param name="order"> Order to add. </param>
-    def add_order(self, order : order_item):
+    def add_order(self, order : OrderItem):
         """"Adds order to accumulator."""
         if self._order_book is None:
             raise Exception('Accumulator not inited.')

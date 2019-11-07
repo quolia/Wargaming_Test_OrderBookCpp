@@ -1,5 +1,5 @@
 
-class command_line:
+class CommandLine:
     """Command line parameters validator."""
     def __init__(self):
         self.__src_file_name = None

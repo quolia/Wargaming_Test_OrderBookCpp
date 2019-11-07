@@ -1,8 +1,8 @@
-from OrderItem import *
+from items import *
 from sortedcontainers import SortedSet
 
 #// / < summary > Interface for order book implementation.< / summary >
-class order_book_iface:
+class OrderBookIface:
 
     #// / < summary > Adds    order. < / summary >
     #// / < param    name = "order" > Order    to    add. < / param >
@@ -27,12 +27,12 @@ class order_book_iface:
     def __del__(self):
         pass
 
-class order_book(order_book_iface):
+class OrderBook(OrderBookIface):
     """Default implementation for order book interface."""
     def __init__(self):
         self._orders = SortedSet()      # Container of orders.
         self._orders_map = dict()       # Supporting 'map' to store order id and data.
-        self._null_order = order_item() # Default order to return if order book is empty.
+        self._null_order = OrderItem() # Default order to return if order book is empty.
 
     #// / < summary > Adds order. < / summary >
     #// / < param name = "order" > Order to add.O(log(n)). < / param >
@@ -58,7 +58,7 @@ class order_book(order_book_iface):
         self._orders_map.pop(id)    # O(1)
 
         # Remove the order from 'set'.
-        self._orders.remove(order_item.from_data(id, data)) # O(log(n))
+        self._orders.remove(OrderItem.from_data(id, data)) # O(log(n))
 
     #// / < summary > Returns top - price order.The top - price order is located at the end of 'set'. < / summary >
     def max_price_order(self):

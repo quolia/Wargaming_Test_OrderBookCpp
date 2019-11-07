@@ -1,6 +1,6 @@
-from OrderItem import *
+from items import *
 
-class orders_file:
+class OrdersFile:
     """Simple wrapper for a file of orders."""
     def __init__(self):
         """Ctor."""
