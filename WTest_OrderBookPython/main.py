@@ -6,7 +6,7 @@ def main():
     print('Started')
     app = application()
     try:
-        app.init()
+        app.init(sys.argv)
         app.run()
     except Exception as e:
         print(f"Error: {e}")

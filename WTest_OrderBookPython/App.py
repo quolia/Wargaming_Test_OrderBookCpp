@@ -1,4 +1,3 @@
-import sys
 from CLI import command_line
 from File import orders_file
 from OrderBook import order_book_iface, order_book
@@ -13,12 +12,12 @@ class application:
         self._order_book = None             # Pointer to order book interface.
         self._accumulator = accumulator()   # Orders time-weight accumulator.
 
-    def init(self):
+    def init(self, args):
         """Initiates application instance."""
         self._is_inited = False
 
         cli_params = command_line()
-        cli_params.init(sys.argv)
+        cli_params.init(args)
 
         print(f'Source file: {cli_params.src_file_name()}')
         self._src_file.open_for_read(cli_params.src_file_name())
