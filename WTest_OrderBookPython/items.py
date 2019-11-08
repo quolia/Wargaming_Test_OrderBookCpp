@@ -1,10 +1,11 @@
-invalid_timestamp = int(-1) # Beware of comparing with 0.
+invalid_timestamp = int(-1)
+
 
 class OrderData:
     """Order data."""
 
-    _price = int(0)
-    _timestamp = invalid_timestamp
+    _price = int(0)                 # Order price.
+    _timestamp = invalid_timestamp  # Order timestamp.
 
     def timestamp(self):
         """Returns order timestamp."""
@@ -14,10 +15,11 @@ class OrderData:
         """Returns order price."""
         return self._price
 
+
 class OrderRecord(OrderData):
     """Order record in source file."""
 
-    _id = int(0)  # Order id.
+    _id = int(0)        # Order id.
     _is_insert = False  # Is insert operation.
 
     def id(self):
@@ -44,12 +46,16 @@ class OrderRecord(OrderData):
 
     def from_string(self, string):
         """
+        Initializes instance with text string.
+
+        Strings example:
         1000 I 100 10.0
         2000 I 101 13.0
         2200 I 102 13.0
         2400 E 101
         2500 E 102
         4000 E 100
+
         :param string: String to init the record.
         """
         parts = string.split(' ')
@@ -59,12 +65,19 @@ class OrderRecord(OrderData):
         self._id = int(parts[2])
         self._price = 0 if not self._is_insert else float(parts[3])
 
+
 class OrderItem(OrderData):
     """Order item class."""
-    _id = int(0)  # Order id.
+
+    _id = int(0) # Order id.
 
     @classmethod
-    def from_record(cls, record: OrderRecord) -> 'OrderItem':
+    def from_record(cls, record: OrderRecord):
+        """
+        Converts OrderRecord to OrderItem instance.
+        :param record: OrderRecord instance.
+        :return: OrderItem record.
+        """
         order = OrderItem()
         order._id = record.id()
         order._timestamp = record.timestamp()
@@ -72,41 +85,21 @@ class OrderItem(OrderData):
         return order
 
     @classmethod
-    def from_data(cls, id: int, data: OrderData) -> 'OrderItem':
+    def from_data(cls, order_id: int, data: OrderData):
+        """
+        Converts OrderData to OrderItem instance.
+        :param order_id: Order id.
+        :param data: Order data.
+        :return: OrderItem record.
+        """
         order = OrderItem()
-        order._id = id
+        order._id = order_id
         order._timestamp = data.timestamp()
         order._price = data.price()
         return order
 
-    """
-    #// / < summary > Data  ctor. < / summary >
-    #// / < param name = "id" > Order id. < / param >
-    #// / < param  name = "timestamp" > Order   timestamp. < / param >
-    #// / < param name = "price" > Order price. < / param >
-    def __init__(self, id, timestamp, price):
-        self._id = id
-        self._timestamp = timestamp
-        self._price = price
-
-    # // / < summary > Copy ctor to copy from order record.< / summary >
-    #// / < param name = "record" > Record to make order copy from . < / param >
-    def __init__(self, record):
-        self._id = record.id()
-        self._timestamp = record.timestamp()
-        self._price = record.price()
-
-
-    #// / < summary > Data ctor to copy from order data.< / summary >
-    #// / < param name = "data" > Data to make order copy from . < / param >
-    def __init__(self, id, data):
-        self._id = id
-        self._timestamp = data.timestamp()
-        self._price = data.price()
-
-    """
-    #// / < summary > Returns order's data without id. </summary>
-    def data(self) -> 'OrderData':
+    def data(self):
+        """Returns order's data without id."""
         data = OrderData()
         data._timestamp = self.timestamp()
         data._price = self.price()
@@ -115,15 +108,7 @@ class OrderItem(OrderData):
     def id(self):
         """Returns order id."""
         return self._id
-    """
-    #// / < summary > Returns order price. < / summary >
-    def price(self):
-        return self._price
-    
-    #// / < summary > Returns order timestamp. < / summary >
-    def timestamp(self):
-        return self._timestamp
-    """
+
     def __eq__(self, other):
         return self.id() == other.id()
 
@@ -131,11 +116,7 @@ class OrderItem(OrderData):
         return self.id()
 
     def __lt__(self, other):
-        # // / < summary > Implements 'less' operation. < / summary >
-        # // / < param name = "l" > Left operand. < / param >
-        # // / < param name = "r" > Right operand. < / param >
-        # // If prices are equal than compare timestamps and than ids.
-
+        """If prices are equal than compare timestamps and than ids."""
         if self.price() == other.price():
             if self.timestamp() == other.timestamp():
                 if self.id() == other.id():

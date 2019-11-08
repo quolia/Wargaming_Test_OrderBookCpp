@@ -9,7 +9,10 @@ class CommandLine:
         return self.__src_file_name
 
     def init(self, args):
-        """Initiates and validates command line parameters."""
+        """
+        Initiates and validates command line parameters.
+        :param args: Command line arguments.
+        """
         if args is None or len(args) < 2:
             raise Exception('Invalid parameters count. Example parameters: srcfile')
         self.__src_file_name = args[1]

@@ -1,13 +1,10 @@
-from items import *
 
 class OrdersFile:
     """Simple wrapper for a file of orders."""
     def __init__(self):
-        """Ctor."""
-        self._f = None # Stream to read.
+        self._f = None # File to read.
 
     def __del__(self):
-        """Dtor."""
         self.close()
 
     def close(self):
@@ -16,17 +13,22 @@ class OrdersFile:
             self._f.close()
             self._f = None
 
-    def open_for_read(self, file_name): # File name to open.
-        """Opens file for read."""
+    def open_for_read(self, file_name):
+        """
+        Opens file for read.
+        :param file_name: File name to open.
+        """
         self.close()
         self._f = open(file_name)
         if not self.is_opened():
             raise Exception('Cannot open file.')
 
-    #/// <param name="record"> Reference to a record to write data in. </param>
-    #/// <returns> Returns false if end of file reached, true otherwise. </returns>
     def read_order_record(self, record):
-        """Reads and validates orders records."""
+        """
+        Reads and validates orders records.
+        :param record: Reference to a record to write data in.
+        :return False if end of file reached, true otherwise.
+        """
         if not self.is_opened():
             raise Exception('File is not opened.')
 
@@ -37,7 +39,9 @@ class OrdersFile:
         record.validate()
         return True
 
-    #/// <returns> Returns true if the file is in opened state. </returns>
     def is_opened(self):
-        """Checks if file is opened."""
-        return self._f
+        """
+        Checks if file is opened.
+        :return True if the file is in opened state.
+        """
+        return self._f is not None

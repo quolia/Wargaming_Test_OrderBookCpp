@@ -1,31 +1,37 @@
-from orderbook import OrderBookIface
+from orderbook import OrderBookInterface
 from items import *
 
 
 class Accumulator:
     """Orders time and price accumulator."""
+
+    _order_book: OrderBookInterface = None  # Pointer to underlying order book container.
+    _accumulator_price = float(0)       # Accumulated value of prices.
+    _accumulator_time = int(0)          # Accumulated value of time.
+    _last_timestamp = invalid_timestamp # Last time maximum price was changed.
+
     def __init__(self):
-        self._order_book: OrderBookIface = None	            #/// <summary> Pointer to underlying order book container. </summary>
-        self._accumulator_price = float(0)	#/// <summary> Accumulated value of prices. </summary>
-        self._accumulator_time = int(0)		#/// <summary> Accumulated value of time. </summary>
-        self._last_timestamp = invalid_timestamp		#/// <summary> Last time maximum price was changed. </summary>
         self.reset()
 
-    #	/// <param name="order_book"> Order book interface. </param>
-    def init(self, order_book: OrderBookIface):
-        """Init accumulator."""
+    def init(self, order_book: OrderBookInterface):
+        """
+        Init accumulator.
+        :param order_book: Order book interface.
+        """
         self._order_book = order_book
 
-    #/// <summary> Resets accumulator state. </summary>
     def reset(self):
+        """Resets accumulator state."""
         self._order_book = None
         self._accumulator_price = float(0)
         self._accumulator_time = int(0)
         self._last_timestamp = invalid_timestamp
 
-        #/// <param name="order"> Order to add. </param>
-    def add_order(self, order : OrderItem):
-        """"Adds order to accumulator."""
+    def add_order(self, order: OrderItem):
+        """"
+        Adds order to accumulator.
+        :param order: Order to add.
+        """
         if self._order_book is None:
             raise Exception('Accumulator not inited.')
 
@@ -43,16 +49,18 @@ class Accumulator:
 
         self._order_book.add(order)
 
-    #/// <param name="id"> Previously added order id. </param>
-    #/// <param name="timestamp"> Current timestamp. </param>
-    def remove_order(self, id, timestamp):
-        """Removes order from accumulator."""
+    def remove_order(self, order_id, timestamp):
+        """
+        Removes order from accumulator.
+        :param order_id: Previously added order id.
+        :param timestamp: Current timestamp.
+        """
         if self._order_book is None:
             raise Exception('Accumulator not inited.')
 
         # Check if the order being removed is the top-price order.
         max_price_order = self._order_book.max_price_order()
-        if max_price_order.id() == id:
+        if max_price_order.id() == order_id:
             if timestamp < self._last_timestamp:
                 raise Exception('Time line inconsistent.')
             elif timestamp != self._last_timestamp: # If not removed at the same time.
@@ -63,7 +71,7 @@ class Accumulator:
                 self._last_timestamp = timestamp
 
         # Remove the order from the book.
-        self._order_book.remove(id)
+        self._order_book.remove(order_id)
 
     def average_highest_price(self):
         """Returns time-weighted average highest price of orders."""

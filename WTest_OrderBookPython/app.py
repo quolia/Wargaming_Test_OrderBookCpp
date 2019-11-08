@@ -1,6 +1,6 @@
 from cli import CommandLine
 from file import OrdersFile
-from orderbook import OrderBookIface, OrderBook
+from orderbook import OrderBookInterface, OrderBookFactory
 from accumulator import Accumulator
 from items import *
 
@@ -10,11 +10,14 @@ class Application:
 
     _is_inited = False                  # The flag is true if the application instance has been inited successfully.
     _src_file = OrdersFile()            # File to read.
-    _order_book: OrderBookIface = None  # Pointer to order book interface.
+    _order_book: OrderBookInterface = None  # Pointer to order book interface.
     _accumulator = Accumulator()        # Orders time-weight accumulator.
 
     def init(self, args):
-        """Initiates application instance."""
+        """
+        Initiates application instance.
+        :param args: Command line arguments.
+        """
         self._is_inited = False
 
         cli = CommandLine()
@@ -23,7 +26,7 @@ class Application:
         print(f'Source file: {cli.src_file_name()}')
         self._src_file.open_for_read(cli.src_file_name())
 
-        self._order_book = OrderBook()
+        self._order_book = OrderBookFactory.get()
         self._accumulator.init(self._order_book)
 
         self._is_inited = True

@@ -1,4 +1,5 @@
-import sys, traceback
+import sys
+import traceback
 from app import Application
 
 
