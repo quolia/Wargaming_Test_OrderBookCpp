@@ -34,13 +34,14 @@ class OrderBookInterface:
 class _OrderBook(OrderBookInterface):
     """Default implementation for order book interface."""
 
-    _orders = SortedSet()      # Container of orders.
-    _orders_map = dict()       # Supporting 'map' to store order id and data.
-    _null_order = OrderItem()  # Default order to return if order book is empty.
+    def __init__(self):
+        self._orders = SortedSet()      # Container of orders.
+        self._orders_map = dict()       # Supporting 'map' to store order id and data.
+        self._null_order = OrderItem()  # Default order to return if order book is empty.
 
     def add(self, order):
         """
-        O(log(n))
+        O(log(n)) + O(1) -> O(log(n))
         Inserts order to the 'set'. It will be automatically inserted to a sort-keep position.
         :param order: Order to add.
         """
@@ -55,7 +56,7 @@ class _OrderBook(OrderBookInterface):
 
     def remove(self, order_id):
         """
-        O(log(n))
+        O(log(n)) + 2 * O(1) -> O(log(n))
         Removes order.
         :param order_id: Previously added order id.
         """

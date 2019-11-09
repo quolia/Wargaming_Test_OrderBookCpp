@@ -8,10 +8,11 @@ from items import *
 class Application:
     """Application class."""
 
-    _is_inited = False                  # The flag is true if the application instance has been inited successfully.
-    _src_file = OrdersFile()            # File to read.
-    _order_book: OrderBookInterface = None  # Pointer to order book interface.
-    _accumulator = Accumulator()        # Orders time-weight accumulator.
+    def __init__(self):
+        self._is_inited = False                     # The flag is true if the application instance has been inited successfully.
+        self._src_file = OrdersFile()               # File to read.
+        self._order_book: OrderBookInterface = None # Pointer to order book interface.
+        self._accumulator = Accumulator()           # Orders time-weight accumulator.
 
     def init(self, args):
         """

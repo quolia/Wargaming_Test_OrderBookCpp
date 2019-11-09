@@ -4,8 +4,9 @@ invalid_timestamp = int(-1)
 class OrderData:
     """Order data."""
 
-    _price = int(0)                 # Order price.
-    _timestamp = invalid_timestamp  # Order timestamp.
+    def __init__(self):
+        self._price = int(0)                 # Order price.
+        self._timestamp = invalid_timestamp  # Order timestamp.
 
     def timestamp(self):
         """Returns order timestamp."""
@@ -19,8 +20,10 @@ class OrderData:
 class OrderRecord(OrderData):
     """Order record in source file."""
 
-    _id = int(0)        # Order id.
-    _is_insert = False  # Is insert operation.
+    def __init__(self):
+        super().__init__()
+        self._id = int(0)        # Order id.
+        self._is_insert = False  # Is insert operation.
 
     def id(self):
         """Returns order id."""
@@ -69,7 +72,9 @@ class OrderRecord(OrderData):
 class OrderItem(OrderData):
     """Order item class."""
 
-    _id = int(0) # Order id.
+    def __init__(self):
+        super().__init__()
+        self._id = int(0) # Order id.
 
     @classmethod
     def from_record(cls, record: OrderRecord):
@@ -96,6 +101,21 @@ class OrderItem(OrderData):
         order._id = order_id
         order._timestamp = data.timestamp()
         order._price = data.price()
+        return order
+
+    @classmethod
+    def from_id(cls, order_id: int, timestamp: int, price: float):
+        """
+        Converts OrderData to OrderItem instance.
+        :param order_id: Order id.
+        :param timestamp: Order timestamp.
+        :param price: Order price.
+        :return: OrderItem record.
+        """
+        order = OrderItem()
+        order._id = order_id
+        order._timestamp = timestamp
+        order._price = price
         return order
 
     def data(self):

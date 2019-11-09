@@ -5,12 +5,11 @@ from items import *
 class Accumulator:
     """Orders time and price accumulator."""
 
-    _order_book: OrderBookInterface = None  # Pointer to underlying order book container.
-    _accumulator_price = float(0)       # Accumulated value of prices.
-    _accumulator_time = int(0)          # Accumulated value of time.
-    _last_timestamp = invalid_timestamp # Last time maximum price was changed.
-
     def __init__(self):
+        self._order_book: OrderBookInterface = None  # Pointer to underlying order book container.
+        self._accumulator_price = float(0)           # Accumulated value of prices.
+        self._accumulator_time = int(0)              # Accumulated value of time.
+        self._last_timestamp = invalid_timestamp     # Last time maximum price was changed.
         self.reset()
 
     def init(self, order_book: OrderBookInterface):
