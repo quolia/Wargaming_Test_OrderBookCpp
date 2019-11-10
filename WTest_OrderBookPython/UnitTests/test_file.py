@@ -1,3 +1,5 @@
+import sys
+sys.path.append('..')
 import unittest
 from file import OrdersFile
 from items import OrderRecord
@@ -14,7 +16,7 @@ class FileTestCase(unittest.TestCase):
 		try:
 			file.open_for_read('not_exists.txt')
 		except FileNotFoundError:
-			self.assertFalse(file.is_opened(), 'File is opened')
+			self.assertFalse(file.is_opened(), 'File is opened.')
 
 	def test_File_file_read_from_not_opened(self):
 		file = OrdersFile()
@@ -26,7 +28,7 @@ class FileTestCase(unittest.TestCase):
 		file = OrdersFile()
 		file.open_for_read('TestOrders/valid10.5.txt')
 		file.close()
-		self.assertFalse(file.is_opened(), 'File is still opened')
+		self.assertFalse(file.is_opened(), 'File is still opened.')
 
 	def test_File_file_read_from_invalid(self):
 		file = OrdersFile()
@@ -39,7 +41,7 @@ class FileTestCase(unittest.TestCase):
 		file = OrdersFile()
 		file.open_for_read('TestOrders/empty.txt')
 		record = OrderRecord()
-		self.assertFalse(file.read_order_record(record), 'Read from empty')
+		self.assertFalse(file.read_order_record(record), 'Read from empty.')
 
 
 if __name__ == '__main__':

@@ -1,6 +1,6 @@
+import sys
+sys.path.append('..')
 import unittest
-#import sys
-#sys.path.append('..')
 from cli import CommandLine
 
 

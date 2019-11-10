@@ -1,3 +1,5 @@
+import sys
+sys.path.append('..')
 import unittest
 from items import OrderItem
 from orderbook import OrderBookFactory
