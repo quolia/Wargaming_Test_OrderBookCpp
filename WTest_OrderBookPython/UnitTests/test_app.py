@@ -1,7 +1,8 @@
 import sys
-sys.path.append('..')
 import unittest
 from app import Application
+
+sys.path.append('..')
 
 
 class AppTestCase(unittest.TestCase):

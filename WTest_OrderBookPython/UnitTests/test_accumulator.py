@@ -1,5 +1,3 @@
-import sys
-sys.path.append('..')
 import unittest
 import random
 from accumulator import Accumulator

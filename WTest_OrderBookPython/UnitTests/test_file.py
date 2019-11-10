@@ -1,8 +1,9 @@
 import sys
-sys.path.append('..')
 import unittest
 from file import OrdersFile
 from items import OrderRecord
+
+sys.path.append('..')
 
 
 class FileTestCase(unittest.TestCase):
