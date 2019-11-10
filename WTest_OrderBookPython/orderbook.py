@@ -2,6 +2,20 @@ from items import *
 from sortedcontainers import SortedSet
 
 
+def _my_SortedSet_add(self, value):
+    """SortedSet add function with exception in case a value has been already added to the set."""
+    _set = self._set
+    if value not in _set:
+        _set.add(value)
+        self._list.add(value)
+    else:
+        raise Exception('Value has been already added to SortedList.')
+
+
+SortedSet.add = _my_SortedSet_add
+SortedSet._add = SortedSet.add
+
+
 class OrderBookInterface:
     """Interface for order book implementation."""
 
