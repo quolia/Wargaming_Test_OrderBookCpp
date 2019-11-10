@@ -130,11 +130,11 @@ class AccumulatorTestCase(unittest.TestCase):
 		acc.init(order_book)
 
 		for i in range(10):
-			order = OrderItem.from_id(i+1, 1000 * i, 10)
+			order = OrderItem.from_id(i+1, 1000*i, 10)
 			acc.add_order(order)
 
 		for i in range(10):
-			acc.remove_order(i+1, 10000 + i * 1000)
+			acc.remove_order(i+1, 10000 + 1000*i)
 
 		self.assertTrue(acc.average_highest_price() == 10)
 
@@ -144,7 +144,7 @@ class AccumulatorTestCase(unittest.TestCase):
 		acc.init(order_book)
 
 		for i in range(10):
-			order = OrderItem.from_id(i+1, 1000 * i, 10)
+			order = OrderItem.from_id(i+1, 1000*i, 10)
 			acc.add_order(order)
 
 		for i in range(10):
