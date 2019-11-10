@@ -11,8 +11,8 @@ def main():
         app.run()
     except Exception as e:
         print(f"Error: {e}")
-        traceback.print_last()
-        exit(-1)
+        traceback.print_exc(file=sys.stdout)
+        return -1
 
     # Output result.
     print(f'Time-weighted average highest price of orders: {app.average_highest_price()}')
