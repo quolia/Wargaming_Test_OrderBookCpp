@@ -93,7 +93,7 @@ namespace WG_ORDERBOOK
 #endif
 			if (!_order_book)
 			{
-				throw exception("Accumulator not inited.");
+				throw exception("Accumulator is not inited.");
 			}
 
 			// Check if the order being removed is the top-price order.
