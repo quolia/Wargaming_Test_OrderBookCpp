@@ -2,8 +2,8 @@
 #include "CppUnitTest.h"
 #include "../WTest_OrderBook/OrderBook.h"
 #include "Utils.h"
-using namespace WG_ORDERBOOK;
 
+using namespace WG_ORDERBOOK;
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace UnitTests
@@ -16,6 +16,7 @@ namespace UnitTests
 		{
 			order_item order;
 			order_book book;
+
 			Assert::IsTrue(book.size() == 0, L"Order book is not empty.");
 		}
 
@@ -24,7 +25,9 @@ namespace UnitTests
 			order_item order(1, 1, 1);
 			order_book book;
 			book.add(order);
+
 			Assert::IsTrue(book.size() == 1, L"Order book is empty.");
+			
 			book.remove(order.id());
 			Assert::IsTrue(book.size() == 0, L"Order book is not empty.");
 		}
@@ -35,6 +38,7 @@ namespace UnitTests
 			{
 				order_book book;
 				book.remove(1);
+
 				Assert::Fail(L"Exception missing.");
 			}
 			catch (const exception&)
@@ -51,6 +55,7 @@ namespace UnitTests
 				order_book book;
 				book.add(order);
 				book.remove(2);
+
 				Assert::Fail(L"Exception missing.");
 			}
 			catch (const exception&)
@@ -62,6 +67,7 @@ namespace UnitTests
 		TEST_METHOD(Test_OrderBook_max_price_in_empty)
 		{
 			order_book book;
+
 			Assert::IsTrue(book.max_price_order().price() == 0, L"Max price is not 0.");
 		}
 
@@ -73,6 +79,7 @@ namespace UnitTests
 				order_book book;
 				book.add(order);
 				book.add(order);
+
 				Assert::Fail(L"Exception missing.");
 			}
 			catch (const exception&)
@@ -110,12 +117,16 @@ namespace UnitTests
 			order_book book;
 			book.add(order1);
 			Assert::IsTrue(book.max_price_order().id() == 1, L"Max price order is not correct 1.");
+
 			book.add(order2);
 			Assert::IsTrue(book.max_price_order().id() == 2, L"Max price order is not correct 2.");
+
 			book.add(order3);
 			Assert::IsTrue(book.max_price_order().id() == 3, L"Max price order is not correct 3.");
+
 			book.add(order4);
 			Assert::IsTrue(book.max_price_order().id() == 3, L"Max price order is not correct 4.");
+
 			book.add(order5);
 			Assert::IsTrue(book.max_price_order().id() == 5, L"Max price order is not correct 5.");
 		}

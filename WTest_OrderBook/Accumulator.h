@@ -48,7 +48,7 @@ namespace WG_ORDERBOOK
 
 			_accumulator_price = 0;
 			_accumulator_time = 0;
-			_last_timestamp = invalid_timestamp;
+			_last_timestamp = INVALID_TIMESTAMP;
 		}
 
 		/// <summary> Adds order to accumulator. </summary>

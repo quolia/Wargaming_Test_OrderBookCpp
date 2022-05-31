@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 #include "../WTest_OrderBook/OrderItem.h"
-using namespace WG_ORDERBOOK;
 
+using namespace WG_ORDERBOOK;
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace UnitTests

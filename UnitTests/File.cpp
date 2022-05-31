@@ -2,8 +2,8 @@
 #include "CppUnitTest.h"
 #include "../WTest_OrderBook/File.h"
 #include "Utils.h"
-using namespace WG_ORDERBOOK;
 
+using namespace WG_ORDERBOOK;
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace UnitTests
@@ -60,6 +60,7 @@ namespace UnitTests
 		TEST_METHOD(Test_File_file_open_and_close)
 		{
 			orders_file file;
+
 			try
 			{
 				file.open_for_read("../UnitTests/TestOrders/valid10.5.txt");

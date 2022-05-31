@@ -20,7 +20,7 @@ namespace WG_ORDERBOOK
 
 		/// <summary> Default ctor. </summary>
 		order_data() noexcept
-			: _timestamp(invalid_timestamp), _price(0)
+			: _timestamp(INVALID_TIMESTAMP), _price(0)
 		{
 			//
 		}
@@ -75,7 +75,7 @@ namespace WG_ORDERBOOK
 				throw exception("Invalid order id.");
 			}
 
-			if (invalid_timestamp == _timestamp)
+			if (INVALID_TIMESTAMP == _timestamp)
 			{
 				throw exception("Invalid order timestamp.");
 			}
@@ -219,20 +219,14 @@ namespace WG_ORDERBOOK
 					{
 						return false; // The same order is always not less than itself.
 					}
-					else
-					{
-						return l.id() < r.id();
-					}
+
+					return l.id() < r.id();
 				}
-				else
-				{
-					return l.timestamp() < r.timestamp();
-				}
+
+				return l.timestamp() < r.timestamp();
 			}
-			else
-			{
-				return l.price() < r.price();
-			}
+
+			return l.price() < r.price();
 		}
 	};
 }

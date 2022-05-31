@@ -2,8 +2,8 @@
 #include "CppUnitTest.h"
 #include "Utils.h"
 #include "../WTest_OrderBook/App.h"
-using namespace WG_ORDERBOOK;
 
+using namespace WG_ORDERBOOK;
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace UnitTests
